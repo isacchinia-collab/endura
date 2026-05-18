@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endura — Il mio 70.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sand:    #f5f0e8;
+  --sand2:   #ede7d9;
+  --sand3:   #e3dace;
+  --sand4:   #d4c9b8;
+  --cream:   #faf8f4;
+  --white:   #ffffff;
+  --sage:    #7a9e87;
+  --sage2:   #5c8268;
+  --sage3:   #3d6148;
+  --sage-lt: #e8f0ea;
+  --sage-md: #c4d9ca;
+  --terra:   #c97a54;
+  --terra-lt:#f5e6dc;
+  --sky:     #6b9ab8;
+  --sky-lt:  #dceaf2;
+  --plum:    #8b7ba8;
+  --plum-lt: #ece8f4;
+  --gold:    #c4a35a;
+  --gold-lt: #f5edda;
+  --ink:     #2c3028;
+  --ink2:    #4a5244;
+  --ink3:    #6e7868;
+  --ink4:    #9aa494;
+  --border:  rgba(44,48,40,0.10);
+  --border2: rgba(44,48,40,0.16);
+  --shadow:  0 2px 12px rgba(44,48,40,0.06);
+  --shadow2: 0 4px 24px rgba(44,48,40,0.10);
+  --radius:  14px;
+  --radius-sm: 8px;
+  --sidebar: 260px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Jost', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body); background: var(--sand); color: var(--ink); min-height: 100vh; display: flex; overflow: hidden; }
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: var(--sidebar); min-width: var(--sidebar);
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  height: 100vh; overflow-y: auto;
+  position: sticky; top: 0;
+  box-shadow: 2px 0 16px rgba(44,48,40,0.04);
+}
+
+.logo {
+  padding: 32px 24px 24px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(160deg, var(--sage-lt) 0%, var(--white) 100%);
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--sage2); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.logo-mark svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2; }
+.logo-name { font-family: var(--font-display); font-size: 26px; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+.logo-tag { font-size: 11px; color: var(--ink4); margin-top: 5px; font-weight: 400; letter-spacing: 0.04em; }
+.logo-race { display: inline-flex; align-items: center; gap: 5px; background: var(--sage-lt); border: 1px solid var(--sage-md); border-radius: 20px; padding: 3px 10px; font-size: 10.5px; color: var(--sage2); font-weight: 600; margin-top: 10px; letter-spacing: 0.03em; }
+
+nav { padding: 18px 12px; flex: 1; }
+.nav-group { margin-bottom: 22px; }
+.nav-group-label { font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink4); padding: 0 12px; margin-bottom: 5px; }
+.nav-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13.5px; color: var(--ink3);
+  font-family: var(--font-body); font-weight: 400;
+  border: none; background: none; width: 100%; text-align: left;
+  transition: all 0.15s; margin-bottom: 1px;
+}
+.nav-btn:hover { background: var(--sand); color: var(--ink); }
+.nav-btn.active { background: var(--sage-lt); color: var(--sage2); font-weight: 500; }
+.nav-btn svg { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.8; opacity: 0.8; }
+.nav-btn.active svg { opacity: 1; }
+
+.sidebar-footer { padding: 18px 20px; border-top: 1px solid var(--border); }
+.countdown-widget {
+  background: linear-gradient(135deg, var(--sage2) 0%, var(--sage3) 100%);
+  border-radius: var(--radius-sm); padding: 16px; text-align: center;
+}
+.countdown-num { font-family: var(--font-display); font-size: 34px; color: white; line-height: 1; }
+.countdown-sub { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+.countdown-race { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 8px; }
+
+/* ── MAIN ── */
+#main { flex: 1; height: 100vh; overflow-y: auto; background: var(--sand); }
+.page { display: none; }
+.page.active { display: block; }
+
+.page-header {
+  padding: 36px 40px 28px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.page-header-left {}
+.ph-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink4); margin-bottom: 4px; }
+.ph-title { font-family: var(--font-display); font-size: 28px; color: var(--ink); line-height: 1.1; }
+.ph-actions { display: flex; gap: 8px; align-items: center; }
+
+.page-body { padding: 32px 40px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 30px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: 1px solid var(--border2); background: var(--white);
+  color: var(--ink2); transition: all 0.15s; font-family: var(--font-body);
+}
+.btn:hover { background: var(--sand); }
+.btn-primary { background: var(--sage2); color: white; border-color: var(--sage2); }
+.btn-primary:hover { background: var(--sage3); border-color: var(--sage3); }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-terra { background: var(--terra-lt); color: var(--terra); border-color: transparent; }
+.btn-terra:hover { background: #f0d7c8; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 24px;
+  box-shadow: var(--shadow);
+}
+.card-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink4); margin-bottom: 6px; }
+.card-value { font-family: var(--font-display); font-size: 32px; color: var(--ink); line-height: 1; }
+.card-unit { font-size: 14px; color: var(--ink4); margin-left: 2px; font-family: var(--font-body); }
+.card-sub { font-size: 11.5px; color: var(--ink4); margin-top: 5px; }
+
+/* ── INPUTS ── */
+input, textarea, select {
+  background: var(--sand); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--ink);
+  font-family: var(--font-body); font-size: 13.5px;
+  padding: 9px 13px; outline: none; width: 100%;
+  transition: border-color 0.15s, background 0.15s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--sage2); background: var(--white); }
+label { font-size: 11.5px; color: var(--ink3); margin-bottom: 5px; display: block; font-weight: 500; }
+.form-group { margin-bottom: 14px; }
+textarea { resize: vertical; min-height: 80px; }
+
+/* ── PHASE TABS ── */
+.phase-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+.phase-tab {
+  padding: 7px 18px; border-radius: 30px; font-size: 12.5px;
+  cursor: pointer; border: 1px solid var(--border2);
+  background: var(--white); color: var(--ink3);
+  transition: all 0.15s; font-family: var(--font-body); font-weight: 400;
+}
+.phase-tab:hover { color: var(--ink); background: var(--sand2); }
+.phase-tab.active { background: var(--sage2); border-color: var(--sage2); color: white; font-weight: 500; }
+
+/* ── WEEK GRID ── */
+.week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 24px; }
+.day-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 8px;
+  min-height: 100px; box-shadow: var(--shadow);
+}
+.day-name { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink4); margin-bottom: 7px; }
+.day-session { border-radius: 5px; padding: 4px 7px; margin-bottom: 4px; font-size: 10px; font-weight: 500; line-height: 1.35; }
+.ds-swim  { background: var(--sky-lt);  color: var(--sky);  }
+.ds-bike  { background: var(--sage-lt); color: var(--sage2); }
+.ds-run   { background: var(--terra-lt);color: var(--terra); }
+.ds-ski   { background: var(--plum-lt); color: var(--plum); }
+.ds-brick { background: var(--gold-lt); color: var(--gold); }
+.ds-rest  { background: var(--sand2); color: var(--ink4); }
+.ds-rulli { background: var(--sage-lt); color: var(--sage2); opacity: 0.7; }
+.day-note { font-size: 9.5px; color: var(--ink4); margin-top: 3px; line-height: 1.4; }
+
+/* ── PHASE INFO BOX ── */
+.phase-info-box {
+  background: var(--sage-lt); border: 1px solid var(--sage-md);
+  border-left: 3px solid var(--sage2);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  margin-bottom: 24px; font-size: 13px; color: var(--ink2); line-height: 1.7;
+}
+.phase-info-box strong { color: var(--ink); font-weight: 600; }
+
+/* ── CALENDAR ── */
+.month-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.month-nav-title { font-family: var(--font-display); font-size: 22px; color: var(--ink); min-width: 180px; }
+.icon-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--white); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--ink3); transition: all 0.15s;
+}
+.icon-btn:hover { background: var(--sand2); }
+.cal-day-headers { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 4px; }
+.cal-day-hdr { font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink4); text-align: center; padding: 4px 0; }
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.cal-cell {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); min-height: 78px;
+  padding: 8px; cursor: pointer; transition: all 0.15s;
+}
+.cal-cell:hover { border-color: var(--sage-md); background: var(--sage-lt); }
+.cal-cell.empty { background: transparent; border-color: transparent; cursor: default; pointer-events: none; }
+.cal-cell.today { border-color: var(--sage-md); background: var(--sage-lt); }
+.cal-cell.has-data { border-color: var(--sage-md); }
+.cal-num { font-size: 11px; color: var(--ink4); font-weight: 500; margin-bottom: 5px; }
+.cal-cell.today .cal-num { color: var(--sage2); font-weight: 700; }
+.cal-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin: 1px; }
+.cal-emoji { font-size: 11px; }
+
+/* ── STATS ── */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+
+/* ── DIETA ── */
+.diet-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px; box-shadow: var(--shadow); }
+.diet-month-label { font-family: var(--font-display); font-size: 17px; color: var(--ink); }
+.diet-body { background: var(--sand); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--ink2); line-height: 1.75; white-space: pre-wrap; margin-top: 12px; min-height: 50px; }
+
+/* ── MODAL ── */
+#modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(44,48,40,0.35);
+  display: none; align-items: center; justify-content: center;
+  z-index: 1000; backdrop-filter: blur(6px);
+}
+#modal-overlay.open { display: flex; }
+#modal {
+  background: var(--white); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 32px 36px;
+  width: 500px; max-width: 94vw; max-height: 88vh;
+  overflow-y: auto; box-shadow: var(--shadow2);
+}
+.modal-title { font-family: var(--font-display); font-size: 22px; color: var(--ink); margin-bottom: 22px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 22px; }
+
+/* ── MISC ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.pill-sage  { background: var(--sage-lt);  color: var(--sage2);  }
+.pill-terra { background: var(--terra-lt); color: var(--terra);  }
+.pill-sky   { background: var(--sky-lt);   color: var(--sky);    }
+.pill-plum  { background: var(--plum-lt);  color: var(--plum);   }
+.progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+.pr-label { font-size: 12px; color: var(--ink3); width: 60px; flex-shrink: 0; }
+.pr-track { flex: 1; height: 5px; background: var(--sand2); border-radius: 4px; overflow: hidden; }
+.pr-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.pr-val { font-size: 11px; color: var(--ink4); width: 32px; text-align: right; }
+.entry-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.entry-row:last-child { border-bottom: none; }
+.entry-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.checklist-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.checklist-row:last-child { border-bottom: none; }
+.checklist-row input[type=checkbox] { width: auto; accent-color: var(--sage2); cursor: pointer; }
+.tag { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.tag-now { background: var(--sage-lt); color: var(--sage2); }
+.tag-future { background: var(--sand2); color: var(--ink4); }
+
+/* Strava import area */
+.strava-box { background: var(--terra-lt); border: 1.5px dashed #d4a08a; border-radius: var(--radius); padding: 20px 24px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.strava-box:hover { background: #f0d5c5; border-color: var(--terra); }
+.strava-box input[type=file] { display: none; }
+
+input[type=range] { padding: 0; background: transparent; accent-color: var(--sage2); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    <div class="logo-name">Endura</div>
+    <div class="logo-tag">Il tuo percorso verso il traguardo</div>
+    <div class="logo-race">▲ Ironman 70.3 · 2027</div>
+  </div>
+
+  <nav>
+    <div class="nav-group">
+      <div class="nav-group-label">Allenamento</div>
+      <button class="nav-btn active" onclick="go('dashboard')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-btn" onclick="go('piano')">
+        <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        Piano settimanale
+      </button>
+      <button class="nav-btn" onclick="go('diario')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Diario allenamenti
+      </button>
+      <button class="nav-btn" onclick="go('strava')">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Importa da Strava
+      </button>
+      <button class="nav-btn" onclick="go('stats')">
+        <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Statistiche
+      </button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Nutrizione</div>
+      <button class="nav-btn" onclick="go('dieta')">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Dieta mensile
+      </button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Obiettivo</div>
+      <button class="nav-btn" onclick="go('gara')">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Info gara
+      </button>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="countdown-widget">
+      <div class="countdown-num" id="cd-days">—</div>
+      <div class="countdown-sub">giorni alla gara</div>
+      <div class="countdown-race" id="cd-race">Data non impostata</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Panoramica</div>
+        <div class="ph-title">Buongiorno 👋</div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn btn-primary btn-sm" onclick="openModal(null)">+ Allenamento</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="stats-row">
+        <div class="card"><div class="card-label">Sessioni questo mese</div><div class="card-value" id="ds-tot">0</div><div class="card-sub">allenamenti</div></div>
+        <div class="card"><div class="card-label">Nuoto</div><div class="card-value" id="ds-swim" style="color:var(--sky)">0<span class="card-unit">m</span></div><div class="card-sub">🏊 questo mese</div></div>
+        <div class="card"><div class="card-label">Bici</div><div class="card-value" id="ds-bike" style="color:var(--sage2)">0<span class="card-unit">km</span></div><div class="card-sub">🚴 questo mese</div></div>
+        <div class="card"><div class="card-label">Corsa</div><div class="card-value" id="ds-run" style="color:var(--terra)">0<span class="card-unit">km</span></div><div class="card-sub">🏃 questo mese</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div class="card-label" style="margin:0">Settimana tipo — ora</div>
+            <span class="tag tag-now" id="dash-phase-tag">Fase 1</span>
+          </div>
+          <div id="dash-week"></div>
+        </div>
+        <div class="card">
+          <div class="card-label" style="margin-bottom:12px">Fase di preparazione</div>
+          <div id="dash-phase-desc" style="font-size:13px;color:var(--ink2);line-height:1.65;margin-bottom:14px"></div>
+          <div class="divider"></div>
+          <div class="card-label" style="margin-bottom:10px">Volume obiettivo</div>
+          <div id="dash-bars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="card-label" style="margin:0">Ultimi allenamenti</div>
+          <button class="btn btn-sm" onclick="go('diario')">Vedi tutti →</button>
+        </div>
+        <div id="dash-recent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PIANO ═══ -->
+  <div class="page" id="page-piano">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Periodizzazione</div>
+        <div class="ph-title">Piano settimanale</div>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="phase-tabs" id="phase-tabs"></div>
+      <div id="phase-content"></div>
+    </div>
+  </div>
+
+  <!-- ═══ DIARIO ═══ -->
+  <div class="page" id="page-diario">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Il tuo log</div>
+        <div class="ph-title">Diario allenamenti</div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn btn-primary btn-sm" onclick="openModal(null)">+ Aggiungi</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="month-nav">
+        <div class="icon-btn" onclick="changeMonth(-1)">←</div>
+        <div class="month-nav-title" id="cal-title">Maggio 2026</div>
+        <div class="icon-btn" onclick="changeMonth(1)">→</div>
+      </div>
+      <div class="cal-day-headers">
+        <div class="cal-day-hdr">Lun</div><div class="cal-day-hdr">Mar</div><div class="cal-day-hdr">Mer</div>
+        <div class="cal-day-hdr">Gio</div><div class="cal-day-hdr">Ven</div><div class="cal-day-hdr">Sab</div><div class="cal-day-hdr">Dom</div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══ STRAVA IMPORT ═══ -->
+  <div class="page" id="page-strava">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Integrazione</div>
+        <div class="ph-title">Importa da Strava</div>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-label" style="margin-bottom:10px">Come esportare i tuoi dati da Strava</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:1.75;">
+          <strong style="color:var(--ink)">1.</strong> Vai su <strong>strava.com</strong> → Impostazioni → Il mio account → Scarica i tuoi dati<br>
+          <strong style="color:var(--ink)">2.</strong> Strava ti manda un'email con un archivio ZIP<br>
+          <strong style="color:var(--ink)">3.</strong> Estrai il file <code style="background:var(--sand);padding:1px 6px;border-radius:4px;font-size:12px">activities.csv</code><br>
+          <strong style="color:var(--ink)">4.</strong> Caricalo qui sotto — Endura legge data, tipo, distanza e durata automaticamente
+        </div>
+      </div>
+
+      <label class="strava-box" for="strava-file-input" id="strava-drop">
+        <input type="file" id="strava-file-input" accept=".csv" onchange="importStrava(this)">
+        <div style="font-size:28px;margin-bottom:8px">📂</div>
+        <div style="font-size:14px;font-weight:500;color:var(--terra)">Trascina qui il file activities.csv</div>
+        <div style="font-size:12px;color:var(--ink4);margin-top:4px">oppure clicca per selezionare il file</div>
+      </label>
+
+      <div id="strava-preview" style="margin-top:20px"></div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="card-label" style="margin-bottom:12px">Aggiunta manuale rapida</div>
+        <p style="font-size:13px;color:var(--ink3);margin-bottom:16px;line-height:1.6">Puoi anche inserire un singolo allenamento copiando i dati da Strava a mano.</p>
+        <button class="btn btn-primary btn-sm" onclick="openModal(null)">+ Inserisci allenamento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STATS ═══ -->
+  <div class="page" id="page-stats">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Analisi</div>
+        <div class="ph-title">Statistiche</div>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="g3">
+        <div class="card"><div class="card-label">Totale nuoto</div><div class="card-value" id="st-swim" style="color:var(--sky)">0<span class="card-unit">m</span></div><div class="card-sub" id="st-swim-s">0 sessioni</div></div>
+        <div class="card"><div class="card-label">Totale bici</div><div class="card-value" id="st-bike" style="color:var(--sage2)">0<span class="card-unit">km</span></div><div class="card-sub" id="st-bike-s">0 sessioni</div></div>
+        <div class="card"><div class="card-label">Totale corsa</div><div class="card-value" id="st-run" style="color:var(--terra)">0<span class="card-unit">km</span></div><div class="card-sub" id="st-run-s">0 sessioni</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-label" style="margin-bottom:14px">Volume per mese</div>
+        <div id="st-chart" style="display:flex;gap:8px;align-items:flex-end;height:110px;padding-top:8px"></div>
+        <div style="display:flex;gap:16px;margin-top:12px">
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink4)"><div style="width:10px;height:10px;border-radius:2px;background:var(--sky)"></div>Nuoto (/100)</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink4)"><div style="width:10px;height:10px;border-radius:2px;background:var(--sage2)"></div>Bici</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink4)"><div style="width:10px;height:10px;border-radius:2px;background:var(--terra)"></div>Corsa</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label" style="margin-bottom:14px">Tutti gli allenamenti</div>
+        <div id="st-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DIETA ═══ -->
+  <div class="page" id="page-dieta">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Nutrizione</div>
+        <div class="ph-title">Dieta mensile</div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn btn-sm" onclick="addDiet()">+ Aggiungi mese</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <p style="font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.65">Inserisci le indicazioni del nutrizionista per ogni mese. Puoi incollare testo direttamente o caricare file di testo.</p>
+      <div id="diet-list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ GARA ═══ -->
+  <div class="page" id="page-gara">
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="ph-eyebrow">Il tuo obiettivo</div>
+        <div class="ph-title">Info gara</div>
+      </div>
+    </div>
+    <div class="page-body">
+      <div class="g2">
+        <div class="card">
+          <div class="card-label" style="margin-bottom:16px">Dettagli gara</div>
+          <div class="form-group"><label>Nome gara</label><input type="text" id="r-name" placeholder="es. Ironman 70.3 Emilia Romagna" oninput="saveRace()"></div>
+          <div class="form-group"><label>Data gara</label><input type="date" id="r-date" oninput="saveRace()"></div>
+          <div class="form-group"><label>Luogo</label><input type="text" id="r-place" placeholder="es. Cervia (RA)" oninput="saveRace()"></div>
+          <div class="form-group"><label>Obiettivo tempo</label><input type="text" id="r-goal" placeholder="es. 5:30:00" oninput="saveRace()"></div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-label" style="margin-bottom:14px">Le tre frazioni del 70.3</div>
+            <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--sky-lt);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏊</div>
+              <div><div style="font-size:13px;font-weight:500;color:var(--sky)">Nuoto · 1.900 m</div><div style="font-size:11px;color:var(--ink4)">Acque libere · partenza in massa</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--sage-lt);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚴</div>
+              <div><div style="font-size:13px;font-weight:500;color:var(--sage2)">Bici · 90 km</div><div style="font-size:11px;color:var(--ink4)">No-draft · gestione intensità</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+              <div style="width:36px;height:36px;border-radius:10px;background:var(--terra-lt);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏃</div>
+              <div><div style="font-size:13px;font-weight:500;color:var(--terra)">Corsa · 21,1 km</div><div style="font-size:11px;color:var(--ink4)">Run to finish · gestione del ritmo</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-label" style="margin-bottom:10px">Note personali</div>
+            <textarea id="r-notes" rows="4" placeholder="Paure, strategie, obiettivi secondari..." oninput="saveRace()"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="card-label" style="margin:0">Checklist pre-gara</div>
+          <button class="btn btn-sm" onclick="addCheck()">+ Aggiungi</button>
+        </div>
+        <div id="checklist-list"></div>
+      </div>
+    </div>
+  </div>
+
+</main><!-- /main -->
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div id="modal">
+    <div class="modal-title" id="modal-title">Nuovo allenamento</div>
+    <div class="form-group"><label>Data</label><input type="date" id="e-date"></div>
+    <div class="form-group"><label>Tipo</label>
+      <select id="e-type">
+        <option value="swim">🏊 Nuoto</option>
+        <option value="bike">🚴 Bici</option>
+        <option value="run">🏃 Corsa</option>
+        <option value="brick">🧱 Brick (Bici + Corsa)</option>
+        <option value="ski">⛷️ Sci</option>
+        <option value="rulli">🚴 Rulli (indoor)</option>
+        <option value="altro">💪 Altro</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Distanza / Volume (es. 2700 m, 45 km, 1h30)</label><input type="text" id="e-dist" placeholder="es. 2700 m"></div>
+    <div class="form-group"><label>Durata (minuti)</label><input type="number" id="e-dur" placeholder="es. 60"></div>
+    <div class="form-group">
+      <label>Intensità percepita — RPE <span id="rpe-val" style="color:var(--sage2);font-weight:600">5</span>/10</label>
+      <input type="range" id="e-rpe" min="1" max="10" value="5" oninput="document.getElementById('rpe-val').textContent=this.value" style="margin-top:6px">
+    </div>
+    <div class="form-group"><label>Note (sensazioni, condizioni, commenti)</label><textarea id="e-notes" rows="3" placeholder="Ottima sessione, gambe fresche..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Annulla</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Salva allenamento</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+const S = {
+  get: k => { try { return JSON.parse(localStorage.getItem('endura_'+k)); } catch{ return null; } },
+  set: (k,v) => localStorage.setItem('endura_'+k, JSON.stringify(v))
+};
+
+let entries   = S.get('entries') || [];
+let dietList  = S.get('diet')    || [];
+let raceData  = S.get('race')    || {};
+let checks    = S.get('checks')  || [
+  {id:1,text:'Iscriversi alla gara',done:false},
+  {id:2,text:'Acquistare muta per acque libere',done:false},
+  {id:3,text:'Almeno 4 uscite in acque libere',done:false},
+  {id:4,text:'Testare gel e alimentazione in gara',done:false},
+  {id:5,text:'Completare un brick 90 km + 10 km corsa',done:false},
+  {id:6,text:'Visita medica sportiva agonistica',done:false},
+  {id:7,text:'Scegliere e testare scarpe da corsa',done:false},
+];
+
+// ══════════════════════════════════════
+// PIANO DATA
+// ══════════════════════════════════════
+const PHASES = [
+  {
+    id:'p1', label:'Fase 1 · Base', full:'Fase 1 — Base aerobica', dates:'Maggio – Agosto 2026',
+    tag:'now',
+    info:'Mantieni nuoto e corsa invariati — sono già la tua routine. <strong>La novità è una sola:</strong> aggiungere 1 uscita in bici durante la settimana e il lungo nel weekend. Zero intensità, tutto in zona conversazione. Si costruisce il motore aerobico.',
+    bars:{Nuoto:70,Bici:35,Corsa:55},
+    week:{days:[
+      {n:'Lun', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Mar', s:[{t:'swim',l:'Nuoto 2.700 m'},{t:'',l:'ore 6:30'}]},
+      {n:'Mer', s:[{t:'run', l:'Corsa 5–7 km'},{t:'',l:'pausa pranzo'}]},
+      {n:'Gio', s:[{t:'swim',l:'Nuoto 2.700 m'},{t:'',l:'ore 6:30'}]},
+      {n:'Ven', s:[{t:'run', l:'Corsa 5 km'}]},
+      {n:'Sab', s:[{t:'bike',l:'Bici lunga 3–4h'},{t:'',l:'piano piano'}]},
+      {n:'Dom', s:[{t:'rest',l:'Riposo attivo'}]},
+    ]}
+  },
+  {
+    id:'p2', label:'Fase 2 · Build', full:'Fase 2 — Costruzione', dates:'Settembre – Novembre 2026',
+    tag:'future',
+    info:'Il sabato diventa il <strong>brick</strong>: bici lunga + corsa immediata dopo. Aumenta le distanze progressivamente. Inserisci una <strong>gara test</strong> (sprint o olimpico) a settembre/ottobre per sperimentare transizioni e ritmo gara.',
+    bars:{Nuoto:75,Bici:65,Corsa:70},
+    week:{days:[
+      {n:'Lun', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Mar', s:[{t:'swim',l:'Nuoto 3.000 m'},{t:'',l:'+ serie specifiche'}]},
+      {n:'Mer', s:[{t:'run', l:'Corsa 7–8 km'}]},
+      {n:'Gio', s:[{t:'swim',l:'Nuoto 3.000 m'}]},
+      {n:'Ven', s:[{t:'run', l:'Corsa 5 km'},{t:'rulli',l:'Rulli 45 min'}]},
+      {n:'Sab', s:[{t:'brick',l:'Brick 80 km + 5 km'}]},
+      {n:'Dom', s:[{t:'rest',l:'Riposo attivo'}]},
+    ]}
+  },
+  {
+    id:'p3', label:'Fase 3 · Inverno', full:'Fase 3 — Inverno / Sci', dates:'Dicembre 2026 – Aprile 2027',
+    tag:'future',
+    info:'Lo sci nel weekend è un <strong>vero allenamento</strong>: forza eccentrica dei quadricipiti e fondo cardiovascolare. Non aggiungere carichi extra. Mantieni nuoto e corsa infrasettimanali. 1–2 sessioni di rulli per non perdere il feeling con la bici.',
+    bars:{Nuoto:75,Rulli:40,Corsa:50},
+    week:{days:[
+      {n:'Lun', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Mar', s:[{t:'swim',l:'Nuoto 3.000 m'}]},
+      {n:'Mer', s:[{t:'run', l:'Corsa 6 km'}]},
+      {n:'Gio', s:[{t:'swim',l:'Nuoto 3.000 m'},{t:'rulli',l:'Rulli 30 min'}]},
+      {n:'Ven', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Sab', s:[{t:'ski', l:'⛷️ Sci'}]},
+      {n:'Dom', s:[{t:'ski', l:'⛷️ Sci'}]},
+    ]}
+  },
+  {
+    id:'p4', label:'Fase 4 · Peak', full:'Fase 4 — Picco di forma', dates:'Maggio – Luglio 2027',
+    tag:'future',
+    info:'La fase più impegnativa. Brick del sabato e corsa lunga domenica. Porta la bici a 110+ km, la corsa a 18 km. <strong>Tapering</strong>: 2–3 settimane prima riduci il volume del 30–40% ma mantieni qualche picco di intensità. Acque libere obbligatorie!',
+    bars:{Nuoto:80,Bici:90,Corsa:75},
+    week:{days:[
+      {n:'Lun', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Mar', s:[{t:'swim',l:'Nuoto 3.500 m'},{t:'',l:'+ lavoro specifico'}]},
+      {n:'Mer', s:[{t:'run', l:'Corsa 8–10 km'},{t:'rulli',l:'Rulli 45 min'}]},
+      {n:'Gio', s:[{t:'swim',l:'Nuoto 3.000 m'}]},
+      {n:'Ven', s:[{t:'rest',l:'Riposo'}]},
+      {n:'Sab', s:[{t:'brick',l:'Brick 100–110 km + 8 km'}]},
+      {n:'Dom', s:[{t:'run', l:'Corsa 14–18 km'},{t:'',l:'passo lento'}]},
+    ]}
+  }
+];
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+function go(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{ if((b.getAttribute('onclick')||'').includes("'"+id+"'")) b.classList.add('active'); });
+  if(id==='dashboard') renderDashboard();
+  if(id==='piano') renderPiano();
+  if(id==='diario') renderCalendar();
+  if(id==='stats') renderStats();
+  if(id==='dieta') renderDiet();
+  if(id==='gara') renderGara();
+}
+
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
+const TLABELS = {swim:'🏊 Nuoto',bike:'🚴 Bici',run:'🏃 Corsa',brick:'🧱 Brick',ski:'⛷️ Sci',rulli:'🚴 Rulli',altro:'💪 Altro'};
+const TCOLORS = {swim:'var(--sky)',bike:'var(--sage2)',run:'var(--terra)',brick:'var(--gold)',ski:'var(--plum)',rulli:'var(--sage2)',altro:'var(--ink3)'};
+const MONTHS  = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+function currentPhase() {
+  const n=new Date(), y=n.getFullYear(), m=n.getMonth();
+  if(y<2026||(y===2026&&m<4)) return PHASES[0];
+  if(y===2026&&m<=7) return PHASES[0];
+  if(y===2026&&m<=10) return PHASES[1];
+  if((y===2026&&m>=11)||(y===2027&&m<=3)) return PHASES[2];
+  return PHASES[3];
+}
+
+function entryRow(e) {
+  const c = TCOLORS[e.type]||'var(--ink3)';
+  const d = new Date(e.date+'T12:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short'});
+  return `<div class="entry-row">
+    <div style="font-size:11px;color:var(--ink4);min-width:44px;font-family:var(--font-mono)">${d}</div>
+    <div class="entry-dot" style="background:${c}"></div>
+    <div style="font-size:13px;color:var(--ink);flex:1">${TLABELS[e.type]||e.type} <span style="color:var(--ink4);font-weight:300">${e.dist||''}</span></div>
+    <div style="font-size:11px;color:var(--ink4)">${e.dur?e.dur+' min':''}</div>
+    <div style="font-size:11px;color:var(--ink4)">${e.rpe?'RPE '+e.rpe:''}</div>
+    <button onclick="delEntry('${e.id}')" style="border:none;background:none;color:var(--ink4);cursor:pointer;font-size:16px;padding:0 4px;line-height:1" title="Elimina">×</button>
+  </div>`;
+}
+
+function monthStats(m, y) {
+  const es = entries.filter(e=>{ const d=new Date(e.date); return d.getMonth()===m&&d.getFullYear()===y; });
+  return {
+    total: es.length,
+    swim: es.filter(e=>e.type==='swim').reduce((s,e)=>s+parseFloat(e.dist||0),0),
+    bike: es.filter(e=>['bike','rulli','brick'].includes(e.type)).reduce((s,e)=>s+parseFloat(e.dist||0),0),
+    run:  es.filter(e=>['run','brick'].includes(e.type)).reduce((s,e)=>s+parseFloat(e.dist||0),0),
+  };
+}
+
+function barsHtml(bars) {
+  const barColors = {Nuoto:'var(--sky)',Bici:'var(--sage2)',Corsa:'var(--terra)',Rulli:'var(--sage2)'};
+  return Object.entries(bars).map(([k,v])=>`<div class="progress-row">
+    <div class="pr-label">${k}</div>
+    <div class="pr-track"><div class="pr-fill" style="width:${v}%;background:${barColors[k]||'var(--sage2)'}"></div></div>
+    <div class="pr-val">${v}%</div>
+  </div>`).join('');
+}
+
+function weekGridHtml(w) {
+  const dsClass = {swim:'ds-swim',bike:'ds-bike',run:'ds-run',ski:'ds-ski',brick:'ds-brick',rest:'ds-rest',rulli:'ds-rulli'};
+  return `<div class="week-grid">${w.days.map(d=>`<div class="day-card">
+    <div class="day-name">${d.n}</div>
+    ${d.s.map(s=>s.t?`<div class="day-session ${dsClass[s.t]||'ds-rest'}">${s.l}</div>`:`<div class="day-note">${s.l}</div>`).join('')}
+  </div>`).join('')}</div>`;
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+function renderDashboard() {
+  const ph = currentPhase();
+  const now = new Date();
+  const st = monthStats(now.getMonth(), now.getFullYear());
+
+  document.getElementById('dash-phase-tag').textContent = ph.label;
+  document.getElementById('ds-tot').textContent = st.total;
+  document.getElementById('ds-swim').innerHTML = st.swim>=1000?`${(st.swim/1000).toFixed(1)}<span class="card-unit">km</span>`:`${Math.round(st.swim)}<span class="card-unit">m</span>`;
+  document.getElementById('ds-bike').innerHTML = `${Math.round(st.bike)}<span class="card-unit">km</span>`;
+  document.getElementById('ds-run').innerHTML  = `${Math.round(st.run)}<span class="card-unit">km</span>`;
+
+  document.getElementById('dash-phase-desc').innerHTML = ph.info + `<div style="font-size:11px;color:var(--ink4);margin-top:8px">📅 ${ph.dates}</div>`;
+  document.getElementById('dash-bars').innerHTML = barsHtml(ph.bars);
+  document.getElementById('dash-week').innerHTML = weekGridHtml(ph.week);
+
+  const recent = [...entries].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  document.getElementById('dash-recent').innerHTML = recent.length
+    ? recent.map(e=>entryRow(e)).join('')
+    : `<div style="color:var(--ink4);font-size:13px;padding:8px 0">Nessun allenamento ancora. <button class="btn btn-primary btn-sm" onclick="openModal(null)" style="margin-left:8px">Inizia ora →</button></div>`;
+
+  updateCountdown();
+}
+
+// ══════════════════════════════════════
+// PIANO
+// ══════════════════════════════════════
+function renderPiano() {
+  const tabs = document.getElementById('phase-tabs');
+  tabs.innerHTML = '';
+  PHASES.forEach((ph,i)=>{
+    const t = document.createElement('button');
+    t.className = 'phase-tab'+(i===0?' active':'');
+    t.textContent = ph.full;
+    t.onclick = ()=>{ document.querySelectorAll('.phase-tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderPhase(ph); };
+    tabs.appendChild(t);
+  });
+  renderPhase(PHASES[0]);
+}
+
+function renderPhase(ph) {
+  document.getElementById('phase-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="font-family:var(--font-display);font-size:20px;color:var(--ink)">${ph.full}</div>
+      <span class="pill pill-sage">${ph.dates}</span>
+    </div>
+    <div class="phase-info-box">${ph.info}</div>
+    <div class="g${Object.keys(ph.bars).length}" style="margin-bottom:24px">
+      ${Object.entries(ph.bars).map(([k,v])=>{
+        const c={Nuoto:'var(--sky)',Bici:'var(--sage2)',Corsa:'var(--terra)',Rulli:'var(--sage2)'}[k]||'var(--sage2)';
+        return `<div class="card" style="padding:16px 18px">
+          <div class="card-label">${k}</div>
+          <div class="pr-track" style="height:6px;margin:8px 0"><div class="pr-fill" style="width:${v}%;background:${c}"></div></div>
+          <div style="font-size:11px;color:var(--ink4)">${v}% del target</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="card-label" style="margin-bottom:12px">Microciclo tipo</div>
+    ${weekGridHtml(ph.week)}`;
+}
+
+// ══════════════════════════════════════
+// CALENDAR
+// ══════════════════════════════════════
+let calY = new Date().getFullYear(), calM = new Date().getMonth();
+
+function changeMonth(d) { calM+=d; if(calM<0){calM=11;calY--;} if(calM>11){calM=0;calY++;} renderCalendar(); }
+
+function renderCalendar() {
+  document.getElementById('cal-title').textContent = MONTHS[calM]+' '+calY;
+  const grid = document.getElementById('cal-grid');
+  const first = new Date(calY,calM,1);
+  let start = first.getDay(); start = start===0?6:start-1;
+  const days = new Date(calY,calM+1,0).getDate();
+  const today = new Date();
+  let html = '';
+  for(let i=0;i<start;i++) html += '<div class="cal-cell empty"></div>';
+  for(let d=1;d<=days;d++) {
+    const ds = `${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const de = entries.filter(e=>e.date===ds);
+    const isT = today.getDate()===d&&today.getMonth()===calM&&today.getFullYear()===calY;
+    html += `<div class="cal-cell${isT?' today':''}${de.length?' has-data':''}" onclick="openModal('${ds}')">
+      <div class="cal-num">${d}</div>
+      ${de.map(e=>`<span class="cal-dot" style="background:${TCOLORS[e.type]||'var(--ink4)'}" title="${TLABELS[e.type]||e.type}"></span>`).join('')}
+      ${de.length?`<div style="font-size:10px;color:var(--ink4);margin-top:2px">${de.map(e=>({swim:'🏊',bike:'🚴',run:'🏃',brick:'🧱',ski:'⛷️',rulli:'🚴',altro:'💪'}[e.type]||'•')).join(' ')}</div>`:''}
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ══════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════
+let editId = null;
+
+function openModal(dateStr) {
+  editId = null;
+  document.getElementById('modal-title').textContent = 'Nuovo allenamento';
+  document.getElementById('e-date').value = dateStr || new Date().toISOString().split('T')[0];
+  document.getElementById('e-type').value = 'swim';
+  document.getElementById('e-dist').value = '';
+  document.getElementById('e-dur').value  = '';
+  document.getElementById('e-rpe').value  = 5;
+  document.getElementById('rpe-val').textContent = '5';
+  document.getElementById('e-notes').value = '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+function saveEntry() {
+  const e = {
+    id: editId || Date.now().toString(),
+    date: document.getElementById('e-date').value,
+    type: document.getElementById('e-type').value,
+    dist: document.getElementById('e-dist').value,
+    dur:  document.getElementById('e-dur').value,
+    rpe:  document.getElementById('e-rpe').value,
+    notes:document.getElementById('e-notes').value,
+  };
+  if(!e.date) return alert('Inserisci la data');
+  if(editId) entries = entries.filter(x=>x.id!==editId);
+  entries.push(e);
+  S.set('entries',entries);
+  closeModal();
+  renderCalendar(); renderDashboard();
+}
+
+function delEntry(id) {
+  if(!confirm('Eliminare questo allenamento?')) return;
+  entries = entries.filter(e=>e.id!==id);
+  S.set('entries',entries);
+  renderCalendar(); renderDashboard(); renderStats();
+}
+
+// ══════════════════════════════════════
+// STRAVA IMPORT
+// ══════════════════════════════════════
+function importStrava(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    const lines = text.trim().split('\n');
+    if(lines.length<2) return alert('File CSV non valido.');
+    const header = lines[0].split(',').map(h=>h.trim().replace(/"/g,'').toLowerCase());
+    const idxDate = header.findIndex(h=>h.includes('date'));
+    const idxType = header.findIndex(h=>h.includes('type')||h.includes('activity'));
+    const idxDist = header.findIndex(h=>h.includes('distance'));
+    const idxDur  = header.findIndex(h=>h.includes('elapsed')||h.includes('moving')||h.includes('time'));
+    if(idxDate===-1) return alert('Colonna data non trovata nel CSV di Strava.');
+    const typeMap = {
+      'swim':'swim','swimming':'swim','nuoto':'swim',
+      'ride':'bike','cycling':'bike','virtual ride':'rulli','virtual_ride':'rulli','bici':'bike',
+      'run':'run','running':'run','corsa':'run',
+      'ski':'ski','alpine ski':'ski','nordic ski':'ski',
+    };
+    let added=0, dupes=0;
+    const existingDates = new Set(entries.map(e=>e.date+'_'+e.type));
+    for(let i=1;i<lines.length;i++) {
+      const cols = lines[i].split(',').map(c=>c.trim().replace(/"/g,''));
+      if(!cols[idxDate]) continue;
+      const rawDate = cols[idxDate].split(' ')[0].split('T')[0];
+      const rawType = (cols[idxType]||'altro').toLowerCase();
+      const type = typeMap[rawType] || 'altro';
+      const dist = idxDist>=0 ? (parseFloat(cols[idxDist]||0)/1000).toFixed(2) : '';
+      const dur  = idxDur>=0  ? Math.round(parseFloat(cols[idxDur]||0)/60) : '';
+      const key = rawDate+'_'+type;
+      if(existingDates.has(key)) { dupes++; continue; }
+      entries.push({ id:Date.now().toString()+i, date:rawDate, type, dist, dur, rpe:'', notes:'[da Strava]' });
+      existingDates.add(key);
+      added++;
+    }
+    S.set('entries',entries);
+    document.getElementById('strava-preview').innerHTML = `<div class="card" style="background:var(--sage-lt);border-color:var(--sage-md)">
+      <div style="font-size:13px;color:var(--sage2);font-weight:500">✓ Importazione completata</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:6px">${added} allenamenti importati · ${dupes} già presenti (saltati)</div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-sm btn-primary" onclick="go('diario')">Vai al diario →</button>
+        <button class="btn btn-sm" onclick="go('stats')">Vedi statistiche →</button>
+      </div>
+    </div>`;
+    renderDashboard();
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════
+// STATS
+// ══════════════════════════════════════
+function renderStats() {
+  const swimA = entries.filter(e=>e.type==='swim');
+  const bikeA = entries.filter(e=>['bike','rulli','brick'].includes(e.type));
+  const runA  = entries.filter(e=>['run','brick'].includes(e.type));
+  const swimT = swimA.reduce((s,e)=>s+parseFloat(e.dist||0),0);
+  const bikeT = bikeA.reduce((s,e)=>s+parseFloat(e.dist||0),0);
+  const runT  = runA.reduce((s,e)=>s+parseFloat(e.dist||0),0);
+  document.getElementById('st-swim').innerHTML = swimT>=1?`${swimT.toFixed(1)}<span class="card-unit">km</span>`:`${Math.round(swimT*1000)}<span class="card-unit">m</span>`;
+  document.getElementById('st-swim-s').textContent = swimA.length+' sessioni';
+  document.getElementById('st-bike').innerHTML = `${Math.round(bikeT)}<span class="card-unit">km</span>`;
+  document.getElementById('st-bike-s').textContent = bikeA.length+' sessioni';
+  document.getElementById('st-run').innerHTML  = `${Math.round(runT)}<span class="card-unit">km</span>`;
+  document.getElementById('st-run-s').textContent = runA.length+' sessioni';
+
+  // chart
+  const byM = {};
+  entries.forEach(e=>{
+    const d = new Date(e.date);
+    const k = d.getFullYear()+'-'+d.getMonth();
+    if(!byM[k]) byM[k]={swim:0,bike:0,run:0,label:MONTHS[d.getMonth()].slice(0,3)+' '+d.getFullYear().toString().slice(2)};
+    const v = parseFloat(e.dist||0);
+    if(e.type==='swim') byM[k].swim+=v/100;
+    else if(['bike','rulli'].includes(e.type)) byM[k].bike+=v;
+    else if(e.type==='run') byM[k].run+=v;
+    else byM[k].bike+=v;
+  });
+  const months = Object.values(byM).slice(-8);
+  const maxV = Math.max(...months.map(m=>m.swim+m.bike+m.run),1);
+  const chartEl = document.getElementById('st-chart');
+  chartEl.innerHTML = months.length ? months.map(m=>{
+    const tot = m.swim+m.bike+m.run;
+    const h = Math.max(6,Math.round((tot/maxV)*95));
+    const dom = m.bike>=m.run&&m.bike>=m.swim?'var(--sage2)':m.run>=m.swim?'var(--terra)':'var(--sky)';
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="font-size:9px;color:var(--ink4)">${Math.round(tot)}</div>
+      <div style="height:${h}px;background:${dom};border-radius:4px 4px 0 0;width:100%;opacity:0.8"></div>
+      <div style="font-size:9px;color:var(--ink4)">${m.label}</div>
+    </div>`;
+  }).join('') : '<div style="color:var(--ink4);font-size:13px">Nessun dato ancora.</div>';
+
+  const sorted = [...entries].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  document.getElementById('st-list').innerHTML = sorted.length
+    ? sorted.map(e=>entryRow(e)).join('')
+    : '<div style="color:var(--ink4);font-size:13px;padding:8px 0">Nessun allenamento registrato.</div>';
+}
+
+// ══════════════════════════════════════
+// DIETA
+// ══════════════════════════════════════
+function renderDiet() {
+  const c = document.getElementById('diet-list');
+  c.innerHTML = dietList.length
+    ? dietList.map((d,i)=>`<div class="diet-card">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="diet-month-label">📋 ${d.label}</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-sm" onclick="editDiet(${i})">Modifica</button>
+            <button class="btn btn-sm btn-terra" onclick="delDiet(${i})">Elimina</button>
+          </div>
+        </div>
+        <div class="diet-body">${d.content?d.content:'<em style="color:var(--ink4)">Nessun contenuto.</em>'}</div>
+      </div>`).join('')
+    : '<div style="color:var(--ink4);font-size:13px;margin-bottom:16px">Nessun mese ancora. Aggiungi il primo mese →</div>';
+}
+
+function addDiet() {
+  const now = new Date();
+  const label = prompt('Mese (es. Giugno 2026):', MONTHS[now.getMonth()]+' '+now.getFullYear());
+  if(!label) return;
+  const content = prompt('Incolla le indicazioni del nutrizionista:','');
+  if(content===null) return;
+  dietList.push({label,content});
+  S.set('diet',dietList);
+  renderDiet();
+}
+
+function editDiet(i) {
+  const label = prompt('Mese:', dietList[i].label);
+  if(!label) return;
+  const content = prompt('Indicazioni:', dietList[i].content);
+  if(content===null) return;
+  dietList[i]={label,content};
+  S.set('diet',dietList);
+  renderDiet();
+}
+
+function delDiet(i) {
+  if(!confirm('Eliminare?')) return;
+  dietList.splice(i,1);
+  S.set('diet',dietList);
+  renderDiet();
+}
+
+// ══════════════════════════════════════
+// GARA
+// ══════════════════════════════════════
+function renderGara() {
+  document.getElementById('r-name').value  = raceData.name||'';
+  document.getElementById('r-date').value  = raceData.date||'';
+  document.getElementById('r-place').value = raceData.place||'';
+  document.getElementById('r-goal').value  = raceData.goal||'';
+  document.getElementById('r-notes').value = raceData.notes||'';
+  renderChecks();
+  updateCountdown();
+}
+
+function saveRace() {
+  raceData = { name:document.getElementById('r-name').value, date:document.getElementById('r-date').value, place:document.getElementById('r-place').value, goal:document.getElementById('r-goal').value, notes:document.getElementById('r-notes').value };
+  S.set('race',raceData);
+  updateCountdown();
+}
+
+function renderChecks() {
+  document.getElementById('checklist-list').innerHTML = checks.map(c=>`<div class="checklist-row">
+    <input type="checkbox" ${c.done?'checked':''} onchange="toggleCheck(${c.id})">
+    <span style="font-size:13px;color:${c.done?'var(--ink4)':'var(--ink)'};text-decoration:${c.done?'line-through':'none'};flex:1">${c.text}</span>
+    <button onclick="delCheck(${c.id})" style="border:none;background:none;color:var(--ink4);cursor:pointer;font-size:16px;line-height:1">×</button>
+  </div>`).join('');
+}
+
+function toggleCheck(id) { const c=checks.find(x=>x.id===id); if(c){c.done=!c.done;S.set('checks',checks);renderChecks();} }
+function delCheck(id) { checks=checks.filter(x=>x.id!==id); S.set('checks',checks); renderChecks(); }
+function addCheck() { const t=prompt('Nuova voce checklist:'); if(!t) return; checks.push({id:Date.now(),text:t,done:false}); S.set('checks',checks); renderChecks(); }
+
+// ══════════════════════════════════════
+// COUNTDOWN
+// ══════════════════════════════════════
+function updateCountdown() {
+  if(!raceData.date) { document.getElementById('cd-days').textContent='—'; document.getElementById('cd-race').textContent='Data non impostata'; return; }
+  const diff = Math.ceil((new Date(raceData.date)-new Date())/(86400000));
+  document.getElementById('cd-days').textContent = diff>0?diff:'🏁';
+  document.getElementById('cd-race').textContent = raceData.name||new Date(raceData.date+'T12:00').toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+updateCountdown();
+renderDashboard();
+renderPiano();
+</script>
+</body>
+</html>
