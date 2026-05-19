@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Endura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4f8; --bg2:#e4eaf2; --bg3:#d8e2ee;
+  --white:#ffffff;
+  --navy:#1a2340; --navy2:#0f1628;
+  --blue:#3bbde8; --blue2:#1eaadf; --blue3:#0d8fbf;
+  --blue-lt:#e6f5fb; --blue-md:#9dd9f0;
+  --pink:#f04e8c; --pink2:#d63c7a;
+  --pink-lt:#fde8f2; --pink-md:#f7b0d0;
+  --green:#22c48a; --green-lt:#e2f8f1;
+  --amber:#f5a623; --amber-lt:#fef4e5;
+  --ink:#1a2340; --ink2:#2d3a55; --ink3:#5a6880; --ink4:#9aaabf;
+  --border:rgba(26,35,64,.08); --border2:rgba(26,35,64,.14);
+  --shadow:0 1px 8px rgba(26,35,64,.07); --shadow2:0 6px 24px rgba(26,35,64,.12);
+  --r:16px; --rs:10px; --sb:256px;
+  --F:'Plus Jakarta Sans',sans-serif; --M:'DM Mono',monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--B); background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; overflow: hidden; }
+
+/* SIDEBAR */
+#sb { width: var(--sb); min-width: var(--sb); background: var(--navy); border-right: none; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; position: sticky; top: 0; }
+.logo { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); background: linear-gradient(160deg, var(--sage-lt) 0%, var(--white) 65%); }
+.logo-mk { width: 40px; height: 40px; background: var(--blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.logo-mk svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.2; }
+.logo-name { font-family: var(--F); font-size: 22px; font-weight: 800; color: var(--white); letter-spacing: -.03em; }
+.logo-sub { font-size: 10px; color: var(--pink); margin-top: 3px; font-weight: 600; letter-spacing:.03em; }
+.logo-race { display: inline-flex; background: rgba(59,189,232,.15); border: 1px solid rgba(59,189,232,.3); border-radius: 20px; padding: 3px 10px; font-size: 9.5px; color: var(--blue); font-weight: 700; margin-top: 10px; letter-spacing:.04em; }
+nav { padding: 14px 8px; flex: 1; }
+.ng { margin-bottom: 16px; }
+.ng-l { font-size: 8.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 0 10px; margin-bottom: 4px; }
+.nb { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--rs); cursor: pointer; font-size: 12.5px; color: var(--ink3); font-family: var(--B); font-weight: 400; border: none; background: none; width: 100%; text-align: left; transition: all .15s; margin-bottom: 1px; }
+.nb:hover { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
+.nb.on { background: rgba(59,189,232,.18); color: var(--blue); font-weight: 700; }
+.nb svg { width: 14px; height: 14px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.8; opacity: .75; }
+.nb.on svg { opacity: 1; }
+.sb-ft { padding: 14px 16px; border-top: 1px solid var(--border); }
+.cd-box { background: linear-gradient(135deg, var(--blue) 0%, var(--blue3) 100%); border-radius: var(--rs); padding: 14px; text-align: center; }
+.cd-num { font-family: var(--F); font-size: 32px; color: #fff; line-height: 1; }
+.cd-lbl { font-size: 8.5px; color: rgba(255,255,255,.6); margin-top: 3px; letter-spacing: .08em; text-transform: uppercase; }
+.cd-race { font-size: 10px; color: rgba(255,255,255,.45); margin-top: 5px; }
+
+/* MAIN */
+#main { flex: 1; height: 100vh; overflow-y: auto; background: var(--bg); }
+.page { display: none; }
+.page.on { display: block; }
+.ph { padding: 26px 34px 20px; background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; }
+.ph-ey { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--blue2); margin-bottom: 3px; }
+.ph-ti { font-family: var(--F); font-size: 22px; font-weight: 800; color: var(--navy); line-height: 1.1; letter-spacing: -.02em; }
+.ph-ac { display: flex; gap: 6px; }
+.pb { padding: 24px 34px; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 15px; border-radius: 30px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border2); background: var(--white); color: var(--ink2); transition: all .15s; font-family: var(--B); }
+.btn:hover { background: var(--bg2); }
+.btn-p { background: var(--blue); color: #fff; border-color: var(--blue); }
+.btn-p:hover { background: var(--blue2); border-color: var(--blue2); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.btn-del { background: var(--pink-lt); color: var(--pink); border-color: transparent; }
+.btn-del:hover { background: var(--pink-md); }
+
+/* CARDS */
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); }
+
+/* INPUTS */
+input, textarea, select { background: var(--bg); border: 1px solid var(--border2); border-radius: var(--rs); color: var(--ink); font-family: var(--B); font-size: 13px; padding: 8px 11px; outline: none; width: 100%; transition: border-color .15s, background .15s; }
+input:focus, textarea:focus, select:focus { border-color: var(--blue); background: var(--white); }
+label { font-size: 11px; color: var(--ink3); margin-bottom: 4px; display: block; font-weight: 500; }
+.fg { margin-bottom: 11px; }
+textarea { resize: vertical; min-height: 68px; }
+input[type=range] { padding: 0; background: transparent; accent-color: var(--blue); }
+input[type=checkbox] { width: auto; accent-color: var(--blue); cursor: pointer; }
+
+/* GRIDS */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+
+/* KPI */
+.kpi { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; box-shadow: var(--shadow); }
+.kl { font-size: 9.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink4); margin-bottom: 4px; }
+.kv { font-family: var(--M); font-size: 20px; color: var(--ink); line-height: 1; font-weight: 500; }
+.ku { font-size: 10px; color: var(--ink4); margin-left: 1px; }
+.ks { font-size: 10px; color: var(--ink4); margin-top: 3px; }
+
+/* WEEK GRID */
+.wg { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 16px; }
+.dc { background: var(--white); border: 1px solid var(--border); border-radius: var(--rs); padding: 8px 6px; min-height: 88px; box-shadow: var(--shadow); }
+.dc.tdy { border-color: var(--blue); background: var(--blue-lt); }
+.dn { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink4); margin-bottom: 5px; }
+.ds { border-radius: 4px; padding: 3px 5px; margin-bottom: 3px; font-size: 9px; font-weight: 500; line-height: 1.3; }
+.sw { background: var(--blue-lt); color: var(--blue2); }
+.bk { background: var(--green-lt); color: var(--green); }
+.rn { background: var(--pink-lt); color: var(--pink); }
+.sk { background: var(--plum-lt); color: var(--plum); }
+.br { background: var(--amber-lt); color: var(--amber); }
+.rs { background: var(--bg2); color: var(--ink4); }
+.rl { background: var(--green-lt); color: var(--green); opacity: .8; }
+.dn2 { font-size: 8.5px; color: var(--ink4); margin-top: 2px; line-height: 1.3; }
+
+/* PHASE TABS */
+.pt { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 20px; }
+.ptb { padding: 6px 14px; border-radius: 30px; font-size: 11.5px; cursor: pointer; border: 1px solid var(--border2); background: var(--white); color: var(--ink3); transition: all .15s; font-family: var(--B); }
+.ptb:hover { background: var(--bg2); }
+.ptb.on { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
+
+/* INFO BOX */
+.pi { background: var(--blue-lt); border: 1px solid var(--blue-md); border-left: 4px solid var(--blue); border-radius: var(--rs); padding: 12px 16px; margin-bottom: 18px; font-size: 12.5px; color: var(--ink2); line-height: 1.7; }
+.pi strong { color: var(--navy); font-weight: 700; }
+.tip { background: var(--amber-lt); border: 1.5px solid #f0d090; border-left: 4px solid var(--amber); border-radius: var(--rs); padding: 11px 15px; font-size: 12px; color: var(--ink2); line-height: 1.65; margin-bottom: 12px; }
+.tip strong { color: var(--ink); font-weight: 600; }
+
+/* CALENDAR */
+.mn { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+.mnt { font-family: var(--F); font-size: 19px; color: var(--ink); min-width: 160px; }
+.ic { width: 28px; height: 28px; border-radius: 50%; background: var(--white); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; color: var(--ink3); transition: all .15s; }
+.ic:hover { background: var(--bg2); }
+.ch { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; margin-bottom: 3px; }
+.chd { font-size: 8.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--ink4); text-align: center; padding: 3px 0; }
+.cg { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+.cc { background: var(--white); border: 1px solid var(--border); border-radius: var(--rs); min-height: 64px; padding: 5px; cursor: pointer; transition: all .15s; }
+.cc:hover { border-color: var(--blue-md); background: var(--blue-lt); }
+.cc.em { background: transparent; border-color: transparent; pointer-events: none; }
+.cc.tod { border-color: var(--blue); background: var(--blue-lt); }
+.cc.hd { border-color: var(--blue-md); }
+.ccn { font-size: 10px; color: var(--ink4); font-weight: 500; margin-bottom: 3px; }
+.cc.tod .ccn { color: var(--blue2); font-weight: 800; }
+.cdot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin: 1px; }
+
+/* MODAL */
+#mo { position: fixed; inset: 0; background: rgba(30,36,32,.32); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(6px); }
+#mo.on { display: flex; }
+#mo-race { position: fixed; inset: 0; background: rgba(30,36,32,.32); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(6px); }
+#mo-race.on { display: flex; }
+.mdl { background: var(--white); border: 1px solid var(--border2); border-radius: var(--r); padding: 26px 30px; width: 460px; max-width: 94vw; max-height: 88vh; overflow-y: auto; box-shadow: var(--shadow2); }
+.mt { font-family: var(--F); font-size: 19px; color: var(--ink); margin-bottom: 18px; }
+.mac { display: flex; gap: 7px; justify-content: flex-end; margin-top: 16px; }
+
+/* PROGRESS */
+.pr { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+.prl { font-size: 11px; color: var(--ink3); width: 55px; flex-shrink: 0; }
+.prt { flex: 1; height: 4px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
+.prf { height: 100%; border-radius: 4px; transition: width .5s ease; }
+.prv { font-size: 10px; color: var(--ink4); width: 28px; text-align: right; }
+
+/* ENTRY ROW */
+.er { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.er:last-child { border-bottom: none; }
+.edot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* MISC */
+.div { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+.pill { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 10.5px; font-weight: 500; }
+.p-s { background: var(--blue-lt); color: var(--blue2); }
+.p-t { background: var(--terra-lt); color: var(--terra); }
+.p-k { background: var(--sky-lt); color: var(--sky); }
+.tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.tn { background: var(--blue-lt); color: var(--blue2); }
+.tf { background: var(--bg2); color: var(--ink4); }
+
+/* RACE CARD */
+.rc { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 12px; }
+.rbar { height: 6px; background: var(--bg2); border-radius: 4px; overflow: hidden; margin-bottom: 3px; }
+.rfill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+
+/* CHECKLIST */
+.clr { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.clr:last-child { border-bottom: none; }
+
+/* CHART */
+.ca { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; box-shadow: var(--shadow); margin-bottom: 12px; }
+.cat { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; }
+.bw { display: flex; gap: 4px; align-items: flex-end; height: 110px; }
+.bc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.be { width: 100%; border-radius: 3px 3px 0 0; min-height: 3px; }
+.bl { font-size: 8px; color: var(--ink4); text-align: center; margin-top: 2px; }
+.lr { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 9px; }
+.li { display: flex; align-items: center; gap: 3px; font-size: 10px; color: var(--ink4); }
+.ld { width: 8px; height: 8px; border-radius: 2px; }
+
+/* DIET */
+.diet-day { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 9px; box-shadow: var(--shadow); }
+.ddt { font-family: var(--F); font-size: 14px; color: var(--ink); margin-bottom: 9px; display: flex; align-items: center; gap: 7px; }
+.dm { border-radius: var(--rs); padding: 9px 12px; margin-bottom: 6px; }
+.dmn { font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 3px; }
+.dmc { font-size: 12px; color: var(--ink2); line-height: 1.65; }
+.m-matt { background: var(--blue-lt); } .m-matt .dmn { color: var(--blue2); }
+.m-spun { background: var(--amber-lt); } .m-spun .dmn { color: var(--amber); }
+.m-pran { background: var(--green-lt); } .m-pran .dmn { color: var(--green); }
+.m-meri { background: var(--pink-lt); } .m-meri .dmn { color: var(--pink); }
+.m-cena { background: var(--plum-lt); } .m-cena .dmn { color: var(--plum); }
+
+/* UPLOAD */
+.uz { border: 2.5px dashed var(--blue-md); border-radius: var(--r); padding: 28px; text-align: center; cursor: pointer; transition: all .2s; background: var(--white); }
+.uz:hover { border-color: var(--blue); background: var(--blue-lt); }
+.uz input { display: none; }
+.ldg { background: var(--blue-lt); border: 1px solid var(--blue-md); border-radius: var(--r); padding: 20px; text-align: center; }
+.spin { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--blue-md); border-top-color: var(--blue); border-radius: 50%; animation: sp .8s linear infinite; }
+@keyframes sp { to { transform: rotate(360deg); } }
+
+/* STRAVA ZONE */
+.strv-z { border: 2.5px dashed var(--pink-md); border-radius: var(--r); padding: 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--pink-lt); margin-top: 16px; }
+.strv-z:hover { border-color: var(--pink); background: #fad4e6; }
+.strv-z input { display: none; }
+</style>
+</head>
+<body>
+
+<aside id="sb">
+  <div class="logo">
+    <div class="logo-mk"><svg viewBox="0 0 28 28" fill="none"><rect x="5" y="7" width="18" height="3" rx="1.5" fill="white"/><rect x="5" y="13" width="13" height="3" rx="1.5" fill="white"/><rect x="5" y="19" width="10" height="3" rx="1.5" fill="white"/><circle cx="21" cy="21" r="3" fill="#f04e8c"/></svg></div>
+    <div class="logo-name">endura</div>
+    <div class="logo-sub">workout planning platform</div>
+    <div class="logo-race">&#9650; Ironman 70.3 &middot; 2027</div>
+  </div>
+  <nav>
+    <div class="ng">
+      <div class="ng-l">Allenamento</div>
+      <button class="nb on" onclick="go('dash')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</button>
+      <button class="nb" onclick="go('piano')"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>Piano settimanale</button>
+      <button class="nb" onclick="go('diario')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Diario allenamenti</button>
+      <button class="nb" onclick="go('stats')"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Statistiche &amp; KPI</button>
+    </div>
+    <div class="ng">
+      <div class="ng-l">Nutrizione</div>
+      <button class="nb" onclick="go('dieta')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Dieta mensile</button>
+    </div>
+    <div class="ng">
+      <div class="ng-l">Gare</div>
+      <button class="nb" onclick="go('gare')"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Le mie gare</button>
+    </div>
+  </nav>
+  <div class="sb-ft">
+    <div class="cd-box">
+      <div class="cd-num" id="cdn">&#8212;</div>
+      <div class="cd-lbl">giorni alla prossima gara</div>
+      <div class="cd-race" id="cdr">Nessuna gara impostata</div>
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+
+<!-- DASHBOARD -->
+<div class="page on" id="page-dash">
+  <div class="ph">
+    <div><div class="ph-ey">Panoramica</div><div class="ph-ti">Buongiorno &#128075;</div></div>
+    <div class="ph-ac"><button class="btn btn-p btn-sm" onclick="openMod(null)">+ Allenamento</button></div>
+  </div>
+  <div class="pb">
+    <div class="g4">
+      <div class="kpi"><div class="kl">Sessioni mese</div><div class="kv" id="d-tot">0</div><div class="ks">allenamenti</div></div>
+      <div class="kpi"><div class="kl">Nuoto</div><div class="kv" id="d-sw" style="color:var(--blue2)">0<span class="ku">m</span></div><div class="ks">&#127944; questo mese</div></div>
+      <div class="kpi"><div class="kl">Bici</div><div class="kv" id="d-bk" style="color:var(--green)">0<span class="ku">km</span></div><div class="ks">&#128692; questo mese</div></div>
+      <div class="kpi"><div class="kl">Corsa</div><div class="kv" id="d-rn" style="color:var(--pink)">0<span class="ku">km</span></div><div class="ks">&#127939; questo mese</div></div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px"><div class="kl" style="margin:0">Questa settimana</div><span class="tag tn" id="d-ptag">Fase 1</span></div>
+        <div id="d-week"></div>
+      </div>
+      <div class="card">
+        <div class="kl" style="margin-bottom:9px">Fase di preparazione</div>
+        <div id="d-phdesc" style="font-size:12px;color:var(--ink2);line-height:1.65;margin-bottom:11px"></div>
+        <div class="div"></div>
+        <div class="kl" style="margin-bottom:7px">Volume obiettivo</div>
+        <div id="d-bars"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+        <div class="kl" style="margin:0">Ultimi allenamenti</div>
+        <button class="btn btn-sm" onclick="go('diario')">Vedi tutti &#8594;</button>
+      </div>
+      <div id="d-rec"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PIANO -->
+<div class="page" id="page-piano">
+  <div class="ph"><div><div class="ph-ey">Periodizzazione progressiva</div><div class="ph-ti">Piano settimanale</div></div></div>
+  <div class="pb">
+    <div class="tip"><strong>Il piano avanza automaticamente</strong> in base alla data di oggi. La fase corrente &#232; evidenziata e si aggiorna man mano che ti avvicini alla gara.</div>
+    <div class="pt" id="ptabs"></div>
+    <div id="pcontent"></div>
+  </div>
+</div>
+
+<!-- DIARIO -->
+<div class="page" id="page-diario">
+  <div class="ph">
+    <div><div class="ph-ey">Il tuo log</div><div class="ph-ti">Diario allenamenti</div></div>
+    <div class="ph-ac"><button class="btn btn-p btn-sm" onclick="openMod(null)">+ Aggiungi</button></div>
+  </div>
+  <div class="pb">
+    <div class="mn">
+      <div class="ic" onclick="chM(-1)">&#8592;</div>
+      <div class="mnt" id="calt">Maggio 2026</div>
+      <div class="ic" onclick="chM(1)">&#8594;</div>
+    </div>
+    <div class="ch"><div class="chd">Lun</div><div class="chd">Mar</div><div class="chd">Mer</div><div class="chd">Gio</div><div class="chd">Ven</div><div class="chd">Sab</div><div class="chd">Dom</div></div>
+    <div class="cg" id="calg"></div>
+    <div style="height:20px"></div>
+    <div class="card">
+      <div class="kl" style="margin-bottom:9px">Importa da Strava</div>
+      <p style="font-size:12px;color:var(--ink3);line-height:1.65;margin-bottom:12px">Esporta le attivit&#224; da <strong>strava.com &#8594; Impostazioni &#8594; Scarica i tuoi dati</strong>, estrai il file <code style="background:var(--bg);padding:1px 5px;border-radius:4px;font-size:10.5px">activities.csv</code> e caricalo qui. Endura importa automaticamente tipo, distanza e durata.</p>
+      <label class="strv-z" for="strv-inp">
+        <input type="file" id="strv-inp" accept=".csv" onchange="importStrava(this)">
+        <div style="font-size:20px;margin-bottom:5px">&#128194;</div>
+        <div style="font-size:12.5px;font-weight:500;color:var(--terra)">Carica activities.csv</div>
+        <div style="font-size:10.5px;color:var(--ink4);margin-top:2px">clicca o trascina il file</div>
+      </label>
+      <div id="strv-res" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="page" id="page-stats">
+  <div class="ph">
+    <div><div class="ph-ey">Analisi &amp; progressi</div><div class="ph-ti">Statistiche &amp; KPI</div></div>
+    <div class="ph-ac">
+      <select id="st-per" onchange="renderStats()" style="width:auto;padding:5px 10px;font-size:11.5px">
+        <option value="all">Tutto il periodo</option>
+        <option value="30">Ultimi 30 giorni</option>
+        <option value="90">Ultimi 90 giorni</option>
+        <option value="180">Ultimi 6 mesi</option>
+      </select>
+    </div>
+  </div>
+  <div class="pb">
+    <div class="g4" id="st-kpi"></div>
+    <div class="g2">
+      <div class="ca">
+        <div class="cat">Volume mensile (km equivalenti)</div>
+        <div class="bw" id="st-vol"></div>
+        <div class="lr">
+          <div class="li"><div class="ld" style="background:var(--blue)"></div>Nuoto /100</div>
+          <div class="li"><div class="ld" style="background:var(--green)"></div>Bici</div>
+          <div class="li"><div class="ld" style="background:var(--pink)"></div>Corsa</div>
+        </div>
+      </div>
+      <div class="ca">
+        <div class="cat">Sessioni per disciplina</div>
+        <div class="bw" id="st-ses"></div>
+      </div>
+    </div>
+    <div class="ca">
+      <div class="cat">Passo medio corsa &mdash; per settimana (min/km)</div>
+      <div class="bw" id="st-pace" style="height:85px"></div>
+      <div style="font-size:10px;color:var(--ink4);margin-top:7px">Barra pi&#249; bassa = passo pi&#249; veloce. Inserisci il passo min:ss/km nelle uscite di corsa per popolare questo grafico.</div>
+    </div>
+    <div class="card">
+      <div class="kl" style="margin-bottom:11px">Tutti gli allenamenti</div>
+      <div id="st-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DIETA -->
+<div class="page" id="page-dieta">
+  <div class="ph">
+    <div><div class="ph-ey">Nutrizione</div><div class="ph-ti">Dieta mensile</div></div>
+    <div class="ph-ac"><button class="btn btn-sm" onclick="addDietM()">+ Aggiungi mese</button></div>
+  </div>
+  <div class="pb">
+    <div class="tip"><strong>Carica il PDF del nutrizionista.</strong> Endura usa l'AI per analizzare il documento e creare automaticamente schede distinte per ogni tipo di giorno: Nuoto, Bici, Corsa, Brick/Gara e Riposo &mdash; con i pasti ottimizzati per ogni tipo di sforzo.</div>
+    <div id="diet-wrap"></div>
+  </div>
+</div>
+
+<!-- GARE -->
+<div class="page" id="page-gare">
+  <div class="ph">
+    <div><div class="ph-ey">Calendario agonistico</div><div class="ph-ti">Le mie gare</div></div>
+    <div class="ph-ac"><button class="btn btn-p btn-sm" onclick="openRaceM()">+ Aggiungi gara</button></div>
+  </div>
+  <div class="pb">
+    <div class="tip">La <strong>percentuale di preparazione</strong> sale automaticamente man mano che ti alleni e ti avvicini alla data della gara.</div>
+    <div id="races-wrap"></div>
+    <div class="card" style="margin-top:4px">
+      <div class="kl" style="margin-bottom:11px">Checklist pre-gara</div>
+      <div id="checks-wrap"></div>
+      <button class="btn btn-sm" onclick="addCheck()" style="margin-top:9px">+ Aggiungi voce</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- MODAL ALLENAMENTO -->
+<div id="mo" onclick="if(event.target===this)closeMod()">
+  <div class="mdl">
+    <div class="mt" id="mod-ti">Nuovo allenamento</div>
+    <div class="fg"><label>Data</label><input type="date" id="e-date"></div>
+    <div class="fg"><label>Tipo</label>
+      <select id="e-type">
+        <option value="swim">&#127944; Nuoto</option>
+        <option value="bike">&#128692; Bici</option>
+        <option value="run">&#127939; Corsa</option>
+        <option value="brick">&#129521; Brick (Bici+Corsa)</option>
+        <option value="ski">&#9975;&#65039; Sci</option>
+        <option value="rulli">&#128692; Rulli (indoor)</option>
+        <option value="altro">&#128170; Altro</option>
+      </select>
+    </div>
+    <div class="fg"><label>Distanza / Volume (es. 2700 m, 45 km)</label><input type="text" id="e-dist" placeholder="es. 2700 m"></div>
+    <div class="fg"><label>Durata (minuti)</label><input type="number" id="e-dur" placeholder="es. 60"></div>
+    <div class="fg"><label>Passo corsa (min:ss/km)</label><input type="text" id="e-pace" placeholder="es. 5:30"></div>
+    <div class="fg"><label>FC media (bpm)</label><input type="number" id="e-hr" placeholder="es. 148"></div>
+    <div class="fg">
+      <label>RPE <span id="rpev" style="color:var(--blue);font-weight:700">5</span>/10</label>
+      <input type="range" id="e-rpe" min="1" max="10" value="5" oninput="document.getElementById('rpev').textContent=this.value" style="margin-top:4px">
+    </div>
+    <div class="fg"><label>Note</label><textarea id="e-notes" rows="2" placeholder="Sensazioni, commenti..."></textarea></div>
+    <div class="mac">
+      <button class="btn" onclick="closeMod()">Annulla</button>
+      <button class="btn btn-p" onclick="saveE()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GARA -->
+<div id="mo-race" onclick="if(event.target===this)closeRaceM()">
+  <div class="mdl" style="width:420px">
+    <div class="mt">Aggiungi gara</div>
+    <div class="fg"><label>Nome gara</label><input type="text" id="r-name" placeholder="es. Ironman 70.3 Cervia"></div>
+    <div class="fg"><label>Tipo</label>
+      <select id="r-type">
+        <option value="70.3">Ironman 70.3</option>
+        <option value="sprint">Triathlon Sprint</option>
+        <option value="olimpico">Triathlon Olimpico</option>
+        <option value="ironman">Ironman Full</option>
+        <option value="altro">Altro</option>
+      </select>
+    </div>
+    <div class="fg"><label>Data gara</label><input type="date" id="r-date"></div>
+    <div class="fg"><label>Luogo</label><input type="text" id="r-place" placeholder="es. Cervia (RA)"></div>
+    <div class="fg"><label>Obiettivo tempo</label><input type="text" id="r-goal" placeholder="es. 5:30:00"></div>
+    <div class="mac">
+      <button class="btn" onclick="closeRaceM()">Annulla</button>
+      <button class="btn btn-p" onclick="saveRace()">Salva gara</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const S={get:k=>{try{return JSON.parse(localStorage.getItem('en4_'+k))}catch{return null}},set:(k,v)=>localStorage.setItem('en4_'+k,JSON.stringify(v))};
+let entries=S.get('en')||[];
+let dietData=S.get('dt')||[];
+let races=S.get('rc')||[{id:'r1',name:'Triathlon Sprint Test',type:'sprint',date:'2026-09-20',place:'Lago di Garda',goal:'1:30:00'},{id:'r2',name:'Ironman 70.3',type:'70.3',date:'2027-06-20',place:'Cervia (RA)',goal:'5:30:00'}];
+let checks=S.get('ck')||[{id:1,text:'Iscriversi alla gara principale',done:false},{id:2,text:'Acquistare muta per acque libere',done:false},{id:3,text:'Almeno 4 uscite in acque libere',done:false},{id:4,text:'Testare gel e alimentazione in allenamento',done:false},{id:5,text:'Completare un brick 90 km + 10 km corsa',done:false},{id:6,text:'Visita medica sportiva agonistica',done:false}];
+
+const MO=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+const TL={swim:'Nuoto',bike:'Bici',run:'Corsa',brick:'Brick',ski:'Sci',rulli:'Rulli',altro:'Altro'};
+const TE={swim:'127944',bike:'128692',run:'127939',brick:'129521',ski:'9975',rulli:'128692',altro:'128170'};
+const TC={swim:'var(--blue)',bike:'var(--green)',run:'var(--pink)',brick:'var(--amber)',ski:'var(--plum)',rulli:'var(--green)',altro:'var(--ink3)'};
+
+function eIcon(t){return String.fromCodePoint(parseInt(TE[t]||'128170'));}
+
+const PH=[
+  {id:'p1',lbl:'Fase 1 \u00b7 Base',full:'Fase 1 \u2014 Base aerobica',dates:'Maggio \u2013 Agosto 2026',
+   info:'Mantieni nuoto e corsa invariati. <strong>La novit\u00e0 \u00e8 una sola:</strong> aggiungi 1 uscita in bici durante la settimana e il lungo nel weekend. Tutto in zona conversazione \u2014 si costruisce il motore aerobico senza stressare il corpo.',
+   bars:{Nuoto:70,Bici:35,Corsa:55},
+   week:[{n:'Lun',s:[{t:'rs',l:'Riposo'}]},{n:'Mar',s:[{t:'sw',l:'Nuoto 2.700 m'},{t:'',l:'ore 6:30'}]},{n:'Mer',s:[{t:'rn',l:'Corsa 5\u20137 km'},{t:'',l:'pausa pranzo'}]},{n:'Gio',s:[{t:'sw',l:'Nuoto 2.700 m'},{t:'',l:'ore 6:30'}]},{n:'Ven',s:[{t:'rn',l:'Corsa 5 km'}]},{n:'Sab',s:[{t:'bk',l:'Bici lunga 3\u20134h'},{t:'',l:'passo lento'}]},{n:'Dom',s:[{t:'rs',l:'Riposo attivo'}]}]},
+  {id:'p2',lbl:'Fase 2 \u00b7 Build',full:'Fase 2 \u2014 Costruzione',dates:'Settembre \u2013 Novembre 2026',
+   info:'Il sabato diventa il <strong>brick</strong>: bici lunga + corsa immediata. Aumenta le distanze progressivamente. Inserisci una <strong>gara test</strong> (sprint o olimpico) a settembre/ottobre per sperimentare transizioni e ritmo gara.',
+   bars:{Nuoto:75,Bici:65,Corsa:70},
+   week:[{n:'Lun',s:[{t:'rs',l:'Riposo'}]},{n:'Mar',s:[{t:'sw',l:'Nuoto 3.000 m'},{t:'',l:'+ serie'}]},{n:'Mer',s:[{t:'rn',l:'Corsa 7\u20138 km'}]},{n:'Gio',s:[{t:'sw',l:'Nuoto 3.000 m'}]},{n:'Ven',s:[{t:'rn',l:'Corsa 5 km'},{t:'rl',l:'Rulli 45 min'}]},{n:'Sab',s:[{t:'br',l:'Brick 80 km + 5 km'}]},{n:'Dom',s:[{t:'rs',l:'Riposo attivo'}]}]},
+  {id:'p3',lbl:'Fase 3 \u00b7 Inverno',full:'Fase 3 \u2014 Inverno / Sci',dates:'Dicembre 2026 \u2013 Aprile 2027',
+   info:'Lo sci \u00e8 un <strong>vero allenamento</strong>: forza eccentrica dei quadricipiti e fondo cardiovascolare. Non aggiungere carichi nel weekend. Mantieni nuoto e corsa infrasettimanali. 1\u20132 sessioni di rulli per non perdere il feeling con la bici.',
+   bars:{Nuoto:75,Rulli:40,Corsa:50},
+   week:[{n:'Lun',s:[{t:'rs',l:'Riposo'}]},{n:'Mar',s:[{t:'sw',l:'Nuoto 3.000 m'}]},{n:'Mer',s:[{t:'rn',l:'Corsa 6 km'}]},{n:'Gio',s:[{t:'sw',l:'Nuoto 3.000 m'},{t:'rl',l:'Rulli 30 min'}]},{n:'Ven',s:[{t:'rs',l:'Riposo'}]},{n:'Sab',s:[{t:'sk',l:'Sci'}]},{n:'Dom',s:[{t:'sk',l:'Sci'}]}]},
+  {id:'p4',lbl:'Fase 4 \u00b7 Peak',full:'Fase 4 \u2014 Picco di forma',dates:'Maggio \u2013 Luglio 2027',
+   info:'La fase pi\u00f9 impegnativa. Brick lungo sabato + corsa lunga domenica. Porta la bici a 110+ km, la corsa a 18 km. <strong>Tapering</strong> 2\u20133 settimane prima: riduci il volume del 30\u201340%, mantieni qualche picco di intensit\u00e0. Acque libere obbligatorie!',
+   bars:{Nuoto:80,Bici:90,Corsa:75},
+   week:[{n:'Lun',s:[{t:'rs',l:'Riposo'}]},{n:'Mar',s:[{t:'sw',l:'Nuoto 3.500 m'},{t:'',l:'+ lavoro specifico'}]},{n:'Mer',s:[{t:'rn',l:'Corsa 8\u201310 km'},{t:'rl',l:'Rulli 45 min'}]},{n:'Gio',s:[{t:'sw',l:'Nuoto 3.000 m'}]},{n:'Ven',s:[{t:'rs',l:'Riposo'}]},{n:'Sab',s:[{t:'br',l:'Brick 100\u2013110 km + 8 km'}]},{n:'Dom',s:[{t:'rn',l:'Corsa 14\u201318 km'},{t:'',l:'passo lento'}]}]}
+];
+
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  document.querySelectorAll('.nb').forEach(b=>{if((b.getAttribute('onclick')||'').includes("'"+id+"'"))b.classList.add('on')});
+  if(id==='dash')rdDash();
+  if(id==='piano')rdPiano();
+  if(id==='diario')rdCal();
+  if(id==='stats')renderStats();
+  if(id==='dieta')rdDiet();
+  if(id==='gare')rdGare();
+}
+
+function curPh(){
+  const n=new Date(),y=n.getFullYear(),m=n.getMonth();
+  if(y<2026||(y===2026&&m<4))return PH[0];
+  if(y===2026&&m<=7)return PH[0];
+  if(y===2026&&m<=10)return PH[1];
+  if((y===2026&&m>=11)||(y===2027&&m<=3))return PH[2];
+  return PH[3];
+}
+
+function wkH(week,hl){
+  const dc={sw:'sw',bk:'bk',rn:'rn',sk:'sk',br:'br',rs:'rs',rl:'rl'};
+  const td=new Date().getDay();
+  const dm={1:'Lun',2:'Mar',3:'Mer',4:'Gio',5:'Ven',6:'Sab',0:'Dom'};
+  const tdn=dm[td];
+  return '<div class="wg">'+week.map(d=>'<div class="dc'+(d.n===tdn&&hl?' tdy':'')+'"><div class="dn">'+d.n+'</div>'+d.s.map(s=>s.t?'<div class="ds '+( dc[s.t]||'rs')+'">'+s.l+'</div>':'<div class="dn2">'+s.l+'</div>').join('')+'</div>').join('')+'</div>';
+}
+
+function bH(bars){
+  const bc={Nuoto:'var(--blue)',Bici:'var(--green)',Corsa:'var(--pink)',Rulli:'var(--green)'};
+  return Object.entries(bars).map(([k,v])=>'<div class="pr"><div class="prl">'+k+'</div><div class="prt"><div class="prf" style="width:'+v+'%;background:'+(bc[k]||'var(--green)')+'"></div></div><div class="prv">'+v+'%</div></div>').join('');
+}
+
+function erH(e){
+  const c=TC[e.type]||'var(--ink3)';
+  const d=new Date(e.date+'T12:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short'});
+  const ico=eIcon(e.type);
+  return '<div class="er"><div style="font-size:10px;color:var(--ink4);min-width:38px;font-family:var(--M)">'+d+'</div><div class="edot" style="background:'+c+'"></div><div style="font-size:12px;flex:1;color:var(--ink)">'+ico+' '+(TL[e.type]||e.type)+' <span style="color:var(--ink4);font-weight:300">'+(e.dist||'')+'</span></div><div style="font-size:10px;color:var(--ink4);display:flex;gap:6px">'+(e.dur?'<span>'+e.dur+' min</span>':'')+(e.pace?'<span>\u23f1 '+e.pace+'/km</span>':'')+(e.hr?'<span>\u2665 '+e.hr+' bpm</span>':'')+(e.rpe?'<span style="background:var(--bg2);border-radius:3px;padding:1px 4px">RPE '+e.rpe+'</span>':'')+'</div><button onclick="delE(\''+e.id+'\')" style="border:none;background:none;color:var(--ink4);cursor:pointer;font-size:14px;padding:0 3px;line-height:1">&times;</button></div>';
+}
+
+function mSt(m,y){
+  const es=entries.filter(e=>{const d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===y});
+  return{tot:es.length,swim:es.filter(e=>e.type==='swim').reduce((s,e)=>s+parseFloat(e.dist||0),0),bike:es.filter(e=>['bike','rulli','brick'].includes(e.type)).reduce((s,e)=>s+parseFloat(e.dist||0),0),run:es.filter(e=>['run','brick'].includes(e.type)).reduce((s,e)=>s+parseFloat(e.dist||0),0)};
+}
+
+function rdDash(){
+  const ph=curPh(),now=new Date(),st=mSt(now.getMonth(),now.getFullYear());
+  document.getElementById('d-ptag').textContent=ph.lbl;
+  document.getElementById('d-tot').textContent=st.tot;
+  document.getElementById('d-sw').innerHTML=st.swim>=1000?(st.swim/1000).toFixed(1)+'<span class="ku">km</span>':Math.round(st.swim)+'<span class="ku">m</span>';
+  document.getElementById('d-bk').innerHTML=Math.round(st.bike)+'<span class="ku">km</span>';
+  document.getElementById('d-rn').innerHTML=Math.round(st.run)+'<span class="ku">km</span>';
+  document.getElementById('d-phdesc').innerHTML=ph.info+'<div style="font-size:10px;color:var(--ink4);margin-top:5px">\ud83d\udcc5 '+ph.dates+'</div>';
+  document.getElementById('d-bars').innerHTML=bH(ph.bars);
+  document.getElementById('d-week').innerHTML=wkH(ph.week,true);
+  const rec=[...entries].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  document.getElementById('d-rec').innerHTML=rec.length?rec.map(e=>erH(e)).join(''):'<div style="color:var(--ink4);font-size:12px;padding:5px 0">Nessun allenamento ancora. <button class="btn btn-p btn-sm" onclick="openMod(null)" style="margin-left:7px">Inizia ora \u2192</button></div>';
+  updCd();
+}
+
+function rdPiano(){
+  const tabs=document.getElementById('ptabs');tabs.innerHTML='';
+  const cur=curPh();
+  PH.forEach(ph=>{
+    const t=document.createElement('button');
+    t.className='ptb'+(ph.id===cur.id?' on':'');
+    t.textContent=ph.full+(ph.id===cur.id?' \u2190 ora':'');
+    t.onclick=()=>{document.querySelectorAll('.ptb').forEach(x=>x.classList.remove('on'));t.classList.add('on');rdPhase(ph);};
+    tabs.appendChild(t);
+  });
+  rdPhase(cur);
+}
+
+function rdPhase(ph){
+  const bc={Nuoto:'var(--blue)',Bici:'var(--green)',Corsa:'var(--pink)',Rulli:'var(--green)'};
+  const n=Object.keys(ph.bars).length;
+  document.getElementById('pcontent').innerHTML=
+    '<div style="display:flex;align-items:center;gap:9px;margin-bottom:12px"><div style="font-family:var(--F);font-size:18px;color:var(--ink)">'+ph.full+'</div><span class="pill p-s">'+ph.dates+'</span></div>'+
+    '<div class="pi">'+ph.info+'</div>'+
+    '<div class="g'+n+'" style="margin-bottom:18px">'+Object.entries(ph.bars).map(([k,v])=>'<div class="card" style="padding:12px 14px"><div class="kl">'+k+'</div><div class="prt" style="height:5px;margin:6px 0"><div class="prf" style="width:'+v+'%;background:'+(bc[k]||'var(--green)')+'"></div></div><div style="font-size:10px;color:var(--ink4)">'+v+'% target</div></div>').join('')+'</div>'+
+    '<div class="kl" style="margin-bottom:9px">Microciclo tipo</div>'+
+    wkH(ph.week,false)+
+    '<div class="tip" style="margin-top:8px"><strong>Progressione nella fase:</strong> settimane 1\u20132 aumenta volume +5\u201310%, settimana 3 mantieni, settimana 4 scarico \u221220%. Poi ricomincia ad un livello superiore.</div>';
+}
+
+let calY=new Date().getFullYear(),calM=new Date().getMonth();
+function chM(d){calM+=d;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}rdCal();}
+function rdCal(){
+  document.getElementById('calt').textContent=MO[calM]+' '+calY;
+  const grid=document.getElementById('calg');
+  const first=new Date(calY,calM,1);let st=first.getDay();st=st===0?6:st-1;
+  const days=new Date(calY,calM+1,0).getDate();const today=new Date();let h='';
+  for(let i=0;i<st;i++)h+='<div class="cc em"></div>';
+  for(let d=1;d<=days;d++){
+    const ds=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const de=entries.filter(e=>e.date===ds);
+    const iT=today.getDate()===d&&today.getMonth()===calM&&today.getFullYear()===calY;
+    h+='<div class="cc'+(iT?' tod':'')+(de.length?' hd':'')+'" onclick="openMod(\''+ds+'\')">';
+    h+='<div class="ccn">'+d+'</div>';
+    h+=de.map(e=>'<span class="cdot" style="background:'+TC[e.type]+'"></span>').join('');
+    if(de.length)h+='<div style="font-size:9px;color:var(--ink4);margin-top:2px">'+de.map(e=>eIcon(e.type)).join(' ')+'</div>';
+    h+='</div>';
+  }
+  grid.innerHTML=h;
+}
+
+let editId=null;
+function openMod(ds){
+  editId=null;
+  document.getElementById('mod-ti').textContent='Nuovo allenamento';
+  document.getElementById('e-date').value=ds||new Date().toISOString().split('T')[0];
+  ['e-dist','e-dur','e-pace','e-hr','e-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('e-type').value='swim';
+  document.getElementById('e-rpe').value=5;document.getElementById('rpev').textContent='5';
+  document.getElementById('mo').classList.add('on');
+}
+function closeMod(){document.getElementById('mo').classList.remove('on');}
+function saveE(){
+  const e={id:editId||Date.now().toString(),date:document.getElementById('e-date').value,type:document.getElementById('e-type').value,dist:document.getElementById('e-dist').value,dur:document.getElementById('e-dur').value,pace:document.getElementById('e-pace').value,hr:document.getElementById('e-hr').value,rpe:document.getElementById('e-rpe').value,notes:document.getElementById('e-notes').value};
+  if(!e.date)return alert('Inserisci la data');
+  if(editId)entries=entries.filter(x=>x.id!==editId);
+  entries.push(e);S.set('en',entries);closeMod();rdCal();rdDash();
+}
+function delE(id){if(!confirm('Eliminare?'))return;entries=entries.filter(e=>e.id!==id);S.set('en',entries);rdCal();rdDash();renderStats();}
+
+function importStrava(inp){
+  const file=inp.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const lines=ev.target.result.trim().split('\n');if(lines.length<2){alert('File non valido');return;}
+    const h=lines[0].split(',').map(x=>x.trim().replace(/"/g,'').toLowerCase());
+    const iD=h.findIndex(x=>x.includes('date')),iT=h.findIndex(x=>x.includes('type')||x.includes('activity')),iDi=h.findIndex(x=>x.includes('distance')),iDu=h.findIndex(x=>x.includes('elapsed')||x.includes('moving'));
+    if(iD<0){alert('Colonna data non trovata');return;}
+    const tm={'swim':'swim','swimming':'swim','ride':'bike','cycling':'bike','virtual ride':'rulli','virtual_ride':'rulli','run':'run','running':'run','alpine ski':'ski','nordic ski':'ski'};
+    let add=0,dup=0;const ex=new Set(entries.map(e=>e.date+'_'+e.type));
+    for(let i=1;i<lines.length;i++){
+      const c=lines[i].split(',').map(x=>x.trim().replace(/"/g,''));if(!c[iD])continue;
+      const dt=c[iD].split(' ')[0].split('T')[0];
+      const ty=tm[(c[iT]||'').toLowerCase()]||'altro';
+      const di=iDi>=0?(parseFloat(c[iDi]||0)/1000).toFixed(2):'';
+      const du=iDu>=0?Math.round(parseFloat(c[iDu]||0)/60):'';
+      const k=dt+'_'+ty;if(ex.has(k)){dup++;continue;}
+      entries.push({id:Date.now().toString()+i,date:dt,type:ty,dist:di,dur:du,rpe:'',pace:'',hr:'',notes:'[Strava]'});
+      ex.add(k);add++;
+    }
+    S.set('en',entries);
+    document.getElementById('strv-res').innerHTML='<div style="background:var(--blue-lt);border:1px solid var(--blue-md);border-radius:var(--rs);padding:10px 14px"><div style="font-size:12.5px;color:var(--blue2);font-weight:700">\u2713 Importazione completata</div><div style="font-size:11px;color:var(--ink3);margin-top:3px">'+add+' importati &middot; '+dup+' gi\u00e0 presenti (saltati)</div></div>';
+    rdCal();rdDash();
+  };
+  r.readAsText(file);
+}
+
+function fltE(){
+  const p=document.getElementById('st-per')?.value||'all';
+  if(p==='all')return entries;
+  const c=new Date();c.setDate(c.getDate()-parseInt(p));
+  return entries.filter(e=>new Date(e.date)>=c);
+}
+
+function renderStats(){
+  const es=fltE();
+  const swE=es.filter(e=>e.type==='swim'),bkE=es.filter(e=>['bike','rulli'].includes(e.type)),rnE=es.filter(e=>['run','brick'].includes(e.type)),brE=es.filter(e=>e.type==='brick');
+  const swT=swE.reduce((s,e)=>s+parseFloat(e.dist||0),0),bkT=bkE.reduce((s,e)=>s+parseFloat(e.dist||0),0),rnT=rnE.reduce((s,e)=>s+parseFloat(e.dist||0),0),totM=es.reduce((s,e)=>s+parseFloat(e.dur||0),0);
+  const pcs=rnE.filter(e=>e.pace&&e.pace.includes(':')).map(e=>{const[m,s]=e.pace.split(':');return parseInt(m)*60+parseInt(s||0);});
+  const avgP=pcs.length?Math.round(pcs.reduce((a,b)=>a+b,0)/pcs.length):0;
+  const avgPStr=avgP?Math.floor(avgP/60)+':'+String(avgP%60).padStart(2,'0'):'--';
+  const hrEs=es.filter(e=>e.hr);
+  const avgHR=hrEs.length?Math.round(hrEs.reduce((s,e)=>s+parseFloat(e.hr),0)/hrEs.length):0;
+  const wkEs=entries.filter(e=>{const n=new Date(),st=new Date(n);st.setDate(n.getDate()-((n.getDay()+6)%7));return new Date(e.date)>=st;});
+
+  document.getElementById('st-kpi').innerHTML=
+    '<div class="kpi"><div class="kl">Nuoto totale</div><div class="kv" style="color:var(--sky)">'+(swT>=1?swT.toFixed(1)+'<span class="ku">km</span>':Math.round(swT*1000)+'<span class="ku">m</span>')+'</div><div class="ks">'+swE.length+' sessioni</div></div>'+
+    '<div class="kpi"><div class="kl">Bici totale</div><div class="kv" style="color:var(--sage2)">'+Math.round(bkT)+'<span class="ku">km</span></div><div class="ks">'+bkE.length+' sessioni</div></div>'+
+    '<div class="kpi"><div class="kl">Corsa totale</div><div class="kv" style="color:var(--terra)">'+Math.round(rnT)+'<span class="ku">km</span></div><div class="ks">'+rnE.length+' sessioni</div></div>'+
+    '<div class="kpi"><div class="kl">Ore totali</div><div class="kv">'+Math.floor(totM/60)+'<span class="ku">h '+Math.round(totM%60)+'m</span></div><div class="ks">'+es.length+' sessioni</div></div>'+
+    '<div class="kpi"><div class="kl">Passo medio corsa</div><div class="kv" style="color:var(--terra)">'+avgPStr+'<span class="ku">min/km</span></div><div class="ks">'+pcs.length+' uscite con passo</div></div>'+
+    '<div class="kpi"><div class="kl">FC media</div><div class="kv" style="color:var(--rose, #b87a87)">'+(avgHR||'--')+(avgHR?'<span class="ku">bpm</span>':'')+'</div><div class="ks">'+hrEs.length+' con monitor</div></div>'+
+    '<div class="kpi"><div class="kl">Brick completati</div><div class="kv">'+brE.length+'</div><div class="ks">sessioni specifiche</div></div>'+
+    '<div class="kpi"><div class="kl">Questa settimana</div><div class="kv">'+wkEs.length+'</div><div class="ks">sessioni</div></div>';
+
+  const byM={};
+  es.forEach(e=>{const d=new Date(e.date);const k=d.getFullYear()+'-'+d.getMonth();if(!byM[k])byM[k]={sw:0,bk:0,rn:0,l:MO[d.getMonth()].slice(0,3)};const v=parseFloat(e.dist||0);if(e.type==='swim')byM[k].sw+=v/100;else if(['bike','rulli'].includes(e.type))byM[k].bk+=v;else if(['run','brick'].includes(e.type))byM[k].rn+=v;});
+  const mA=Object.values(byM).slice(-8);const maxV=Math.max(...mA.map(m=>m.sw+m.bk+m.rn),1);
+  document.getElementById('st-vol').innerHTML=mA.length?mA.map(m=>{const tot=m.sw+m.bk+m.rn;return'<div class="bc"><div style="font-size:8px;color:var(--ink4)">'+Math.round(tot)+'</div><div style="display:flex;flex-direction:column;align-items:center;width:100%"><div class="be" style="height:'+Math.round((m.rn/maxV)*100)+'px;background:var(--terra)"></div><div class="be" style="height:'+Math.round((m.bk/maxV)*100)+'px;background:var(--sage2)"></div><div class="be" style="height:'+Math.round((m.sw/maxV)*100)+'px;background:var(--sky)"></div></div><div class="bl">'+m.l+'</div></div>';}).join(''):'<div style="color:var(--ink4);font-size:11px;padding:10px 0">Nessun dato.</div>';
+
+  const types={swim:0,bike:0,run:0,brick:0,ski:0,rulli:0};es.forEach(e=>{if(e.type in types)types[e.type]++;});const maxS=Math.max(...Object.values(types),1);
+  document.getElementById('st-ses').innerHTML=Object.entries(types).filter(([,v])=>v>0).map(([k,v])=>'<div class="bc"><div style="font-size:8px;color:var(--ink4)">'+v+'</div><div class="be" style="height:'+Math.round((v/maxS)*100)+'px;background:'+TC[k]+'"></div><div class="bl">'+eIcon(k)+'</div></div>').join('');
+
+  const byW={};rnE.filter(e=>e.pace&&e.pace.includes(':')).forEach(e=>{const d=new Date(e.date);const wd=new Date(d);wd.setDate(d.getDate()-((d.getDay()+6)%7));const k=wd.toISOString().split('T')[0];if(!byW[k])byW[k]=[];const[m2,s2]=e.pace.split(':');byW[k].push(parseInt(m2)*60+parseInt(s2||0));});
+  const wA=Object.entries(byW).slice(-8).map(([k,vs])=>({l:k.slice(5),v:Math.round(vs.reduce((a,b)=>a+b,0)/vs.length)}));const maxP=Math.max(...wA.map(w=>w.v),1);
+  document.getElementById('st-pace').innerHTML=wA.length?wA.map(w=>{const h=Math.max(3,Math.round((w.v/maxP)*75));return'<div class="bc"><div style="font-size:8px;color:var(--ink4)">'+Math.floor(w.v/60)+':'+String(w.v%60).padStart(2,'0')+'</div><div class="be" style="height:'+h+'px;background:var(--terra)"></div><div class="bl">'+w.l+'</div></div>';}).join(''):'<div style="color:var(--ink4);font-size:11px;align-self:center">Nessun dato passo disponibile.</div>';
+
+  document.getElementById('st-list').innerHTML=[...es].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>erH(e)).join('')||'<div style="color:var(--ink4);font-size:12px;padding:6px 0">Nessun allenamento nel periodo selezionato.</div>';
+}
+
+function rdDiet(){
+  const w=document.getElementById('diet-wrap');
+  if(!dietData.length){
+    w.innerHTML='<label class="uz" for="diet-fp" style="display:block"><input type="file" id="diet-fp" accept=".pdf,.txt" onchange="hDietF(this)"><div style="font-size:28px;margin-bottom:8px">\ud83d\udcc4</div><div style="font-size:13px;font-weight:500;color:var(--sage2)">Carica il PDF della dieta</div><div style="font-size:11px;color:var(--ink4);margin-top:4px">Clicca per selezionare il PDF del nutrizionista</div></label>';
+    return;
+  }
+  w.innerHTML=dietData.map((dm,mi)=>'<div style="margin-bottom:24px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div style="font-family:var(--F);font-size:18px;color:var(--ink)">\ud83d\udccb '+dm.month+'</div><div style="display:flex;gap:5px"><button class="btn btn-sm" onclick="addDietM()">+ Nuovo mese</button><button class="btn btn-sm btn-del" onclick="delDiet('+mi+')">Elimina</button></div></div>'+dm.days.map(d=>dayH(d)).join('')+'</div>').join('')+'<button class="btn btn-sm" onclick="addDietM()" style="margin-top:4px">+ Aggiungi mese</button>';
+}
+
+function dayH(d){
+  const ic={swim:'\ud83c\udfca',bike:'\ud83d\udeb4',run:'\ud83c\udfc3',rest:'\ud83d\ude34',ski:'\u26f7\ufe0f',brick:'\ud83e\uddf1'}[d.type]||'\ud83d\udcc5';
+  return '<div class="diet-day"><div class="ddt">'+ic+' '+d.title+' <span class="pill p-s" style="font-size:9.5px">'+d.type+'</span></div>'+d.meals.map(m=>'<div class="dm m-'+m.id+'"><div class="dmn">'+m.name+'</div><div class="dmc">'+m.content+'</div></div>').join('')+(d.notes?'<div style="font-size:11px;color:var(--ink4);margin-top:7px;font-style:italic">\ud83d\udca1 '+d.notes+'</div>':'')+'</div>';
+}
+
+function addDietM(){
+  const label=prompt('Mese (es. Giugno 2026):',MO[new Date().getMonth()]+' '+new Date().getFullYear());
+  if(!label)return;
+  const inp=document.createElement('input');inp.type='file';inp.accept='.pdf,.txt';
+  inp.onchange=()=>hDietF(inp,label);inp.click();
+}
+
+function hDietF(inp,label){
+  const file=inp.files[0];if(!file)return;
+  const ml=label||MO[new Date().getMonth()]+' '+new Date().getFullYear();
+  document.getElementById('diet-wrap').innerHTML='<div class="ldg"><div class="spin"></div><div style="font-size:13px;color:var(--blue2);margin-top:10px;font-weight:700">Analisi in corso...</div><div style="font-size:11px;color:var(--ink4);margin-top:3px">Endura sta elaborando la dieta con l\'AI</div></div>';
+  if(file.name.toLowerCase().endsWith('.pdf')){
+    const r=new FileReader();r.onload=e=>aiDiet(e.target.result.split(',')[1],'pdf',ml);r.readAsDataURL(file);
+  }else{
+    const r=new FileReader();r.onload=e=>aiDiet(null,'text',ml,e.target.result);r.readAsText(file);
+  }
+}
+
+async function aiDiet(b64,type,month,txt){
+  const sys=`Sei un nutrizionista sportivo per triatleti. Analizza il documento della dieta e rispondi ESCLUSIVAMENTE con JSON valido, senza markdown, senza backtick, senza testo aggiuntivo prima o dopo.
+Formato: {"days":[{"type":"swim","title":"Giorno Nuoto","meals":[{"id":"matt","name":"Colazione","content":"..."},{"id":"spun","name":"Spuntino pre-allenamento","content":"..."},{"id":"pran","name":"Pranzo post-allenamento","content":"..."},{"id":"meri","name":"Merenda","content":"..."},{"id":"cena","name":"Cena","content":"..."}],"notes":"breve nota nutrizionale"},{"type":"bike","title":"Giorno Bici","meals":[...],"notes":"..."},{"type":"run","title":"Giorno Corsa","meals":[...],"notes":"..."},{"type":"rest","title":"Giorno Riposo","meals":[...],"notes":"..."},{"type":"brick","title":"Giorno Brick e Gara","meals":[...],"notes":"..."}]}
+Adatta i pasti in base al tipo di allenamento: pre-sforzo privilegia carboidrati facilmente digeribili; post-sforzo proteine + carboidrati per recupero; giorno riposo meno carboidrati, pi\u00f9 verdure e proteine. Se il documento non specifica per tipo, crea schede ragionevoli basate sulle indicazioni generali presenti.`;
+  let msgs;
+  if(type==='pdf'){msgs=[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},{type:'text',text:'Analizza questa dieta e crea le schede per ogni tipo di giorno di allenamento.'}]}];}
+  else{msgs=[{role:'user',content:'Analizza questa dieta e crea le schede per ogni tipo di giorno:\n\n'+txt}];}
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:msgs})});
+    const data=await res.json();
+    const rawText=(data.content||[]).map(b=>b.text||'').join('').trim().replace(/```json|```/g,'').trim();
+    let parsed;
+    try{parsed=JSON.parse(rawText);}catch{parsed=fallDiet();}
+    dietData.push({month,days:parsed.days});S.set('dt',dietData);rdDiet();
+  }catch{
+    dietData.push({month,days:fallDiet().days});S.set('dt',dietData);rdDiet();
+  }
+}
+
+function fallDiet(){
+  const base=[{id:'matt',name:'Colazione',content:'Yogurt greco, frutta di stagione, fiocchi d\'avena, caff\u00e8'},{id:'spun',name:'Spuntino pre-allenamento',content:'Banana matura o barretta energetica + acqua'},{id:'pran',name:'Pranzo',content:'Pasta o riso (80 g), proteina magra (pollo/pesce), verdure miste'},{id:'meri',name:'Merenda',content:'Frutta fresca, frutta secca o yogurt'},{id:'cena',name:'Cena',content:'Proteina magra, verdure, carboidrati complessi (patate/riso integrale)'}];
+  return{days:[{type:'swim',title:'Giorno Nuoto',meals:base,notes:'Pre-nuoto: leggero e digeribile. Post: shake proteico o yogurt greco entro 30 min.'},{type:'bike',title:'Giorno Bici',meals:base,notes:'In sella: 60 g carb/h, 500-750 ml acqua/h. Post: recupero carboidrati + proteine.'},{type:'run',title:'Giorno Corsa',meals:base,notes:'Pre-corsa: pasto 2-3h prima. Niente di pesante. Post: recupero entro 30 min.'},{type:'rest',title:'Giorno Riposo',meals:base,notes:'Riduci carboidrati del 15-20%. Priorit\u00e0 a frutta, verdure e proteine magre.'},{type:'brick',title:'Giorno Brick / Gara',meals:base,notes:'Simula la nutrizione di gara: gel ogni 30-45 min in bici, isotonica in corsa.'}]};
+}
+
+function delDiet(i){if(!confirm('Eliminare questo mese?'))return;dietData.splice(i,1);S.set('dt',dietData);rdDiet();}
+
+function calcR(r){
+  const rD=new Date(r.date),start=new Date('2026-05-01'),now=new Date();
+  const total=Math.max(1,(rD-start)/864e5);
+  const elapsed=Math.max(0,(now-start)/864e5);
+  const tPct=Math.min(100,Math.round((elapsed/total)*100));
+  const trPct=Math.min(100,Math.round(entries.length*2.5));
+  return Math.min(95,Math.round(tPct*0.4+trPct*0.6));
+}
+function rCol(p){return p<30?'var(--pink)':p<60?'var(--amber)':p<80?'var(--blue)':'var(--green)';}
+const RT={'70.3':'\ud83d\udd34 70.3','sprint':'\ud83d\udfe1 Sprint','olimpico':'\ud83d\udfe0 Olimpico','ironman':'\u26ab Full IM','altro':'\u26aa Altro'};
+const RDist={'70.3':[['127944','1.900 m'],['128692','90 km'],['127939','21,1 km']],'sprint':[['127944','750 m'],['128692','20 km'],['127939','5 km']],'olimpico':[['127944','1.500 m'],['128692','40 km'],['127939','10 km']],'ironman':[['127944','3.800 m'],['128692','180 km'],['127939','42,2 km']]};
+
+function rdGare(){
+  const sorted=[...races].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  document.getElementById('races-wrap').innerHTML=sorted.length?sorted.map(r=>{
+    const p=calcR(r),c=rCol(p);
+    const dStr=new Date(r.date+'T12:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const isPast=new Date(r.date)<new Date();
+    const dl=Math.ceil((new Date(r.date)-new Date())/864e5);
+    const ds=(RDist[r.type]||[]).map(([cp,v])=>String.fromCodePoint(parseInt(cp))+' '+v);
+    return '<div class="rc">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">'+
+      '<div><div style="font-family:var(--F);font-size:16px;color:var(--ink);margin-bottom:2px">'+r.name+'</div>'+
+      '<div style="font-size:10.5px;color:var(--ink4)">\ud83d\udcc5 '+dStr+(r.place?' &middot; \ud83d\udccd '+r.place:'')+(r.goal?' &middot; \ud83c\udfaf '+r.goal:'')+'</div>'+
+      '<div style="font-size:10px;color:var(--ink4);margin-top:1px">'+(RT[r.type]||r.type)+'</div></div>'+
+      '<button class="btn btn-sm btn-del" onclick="delRace(\''+r.id+'\')">Rimuovi</button></div>'+
+      '<div style="margin-top:12px">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
+      '<div style="font-size:10.5px;font-weight:600;color:var(--ink3)">Preparazione raggiunta</div>'+
+      '<div style="font-size:13px;font-weight:600;color:'+c+'">'+p+'%</div></div>'+
+      '<div class="rbar"><div class="rfill" style="width:'+p+'%;background:'+c+'"></div></div>'+
+      '<div style="font-size:10px;color:var(--ink4);margin-top:3px">'+(isPast?'Gara completata \u2713':dl>0?dl+' giorni al via':'Oggi!')+'</div></div>'+
+      (ds.length?'<div style="display:flex;gap:7px;margin-top:10px">'+ds.map(d=>'<div style="background:var(--bg);border-radius:var(--rs);padding:4px 9px;font-size:11px;color:var(--ink2)">'+d+'</div>').join('')+'</div>':'')+
+      '</div>';
+  }).join(''):'<div style="color:var(--ink4);font-size:12.5px;margin-bottom:12px">Nessuna gara aggiunta ancora.</div>';
+  rdChecks();updCd();
+}
+
+function openRaceM(){['r-name','r-date','r-place','r-goal'].forEach(id=>document.getElementById(id).value='');document.getElementById('r-type').value='70.3';document.getElementById('mo-race').classList.add('on');}
+function closeRaceM(){document.getElementById('mo-race').classList.remove('on');}
+function saveRace(){
+  const r={id:Date.now().toString(),name:document.getElementById('r-name').value,type:document.getElementById('r-type').value,date:document.getElementById('r-date').value,place:document.getElementById('r-place').value,goal:document.getElementById('r-goal').value};
+  if(!r.name||!r.date)return alert('Inserisci nome e data');
+  races.push(r);S.set('rc',races);closeRaceM();rdGare();
+}
+function delRace(id){if(!confirm('Rimuovere questa gara?'))return;races=races.filter(r=>r.id!==id);S.set('rc',races);rdGare();}
+
+function rdChecks(){document.getElementById('checks-wrap').innerHTML=checks.map(c=>'<div class="clr"><input type="checkbox"'+(c.done?' checked':'')+' onchange="togCk('+c.id+')"><span style="font-size:12px;flex:1;color:'+(c.done?'var(--ink4)':'var(--ink)')+';text-decoration:'+(c.done?'line-through':'none')+'">'+c.text+'</span><button onclick="delCk('+c.id+')" style="border:none;background:none;color:var(--ink4);cursor:pointer;font-size:14px;padding:0 3px;line-height:1">&times;</button></div>').join('');}
+function togCk(id){const c=checks.find(x=>x.id===id);if(c){c.done=!c.done;S.set('ck',checks);rdChecks();}}
+function delCk(id){checks=checks.filter(x=>x.id!==id);S.set('ck',checks);rdChecks();}
+function addCheck(){const t=prompt('Nuova voce checklist:');if(!t)return;checks.push({id:Date.now(),text:t,done:false});S.set('ck',checks);rdChecks();}
+
+function updCd(){
+  const s=[...races].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const nx=s.find(r=>new Date(r.date)>=new Date());
+  if(!nx){document.getElementById('cdn').textContent='\u2014';document.getElementById('cdr').textContent='Nessuna gara';return;}
+  const d=Math.ceil((new Date(nx.date)-new Date())/864e5);
+  document.getElementById('cdn').textContent=d>0?d:'\ud83c\udfc1';
+  document.getElementById('cdr').textContent=nx.name;
+}
+
+rdDash();rdPiano();updCd();
+</script>
+</body>
+</html>
